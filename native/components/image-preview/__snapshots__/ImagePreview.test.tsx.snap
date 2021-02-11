@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImagePreview component matches snapshot 1`] = `
+<View
+  style={
+    Array [
+      Object {},
+      Object {
+        "alignItems": "center",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      Array [
+        Object {},
+        Object {
+          "alignItems": "center",
+          "borderColor": "#ccc",
+          "borderStyle": "solid",
+          "borderWidth": 1,
+          "height": 350,
+          "justifyContent": "center",
+          "marginBottom": 5,
+          "width": "100%",
+        },
+        undefined,
+      ]
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000",
+          "fontFamily": "System",
+          "fontSize": 16,
+        }
+      }
+    >
+       No image picked yet
+    </Text>
+  </View>
+</View>
+`;
