@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { Touchable } from '../touchable';
-import { Text, H3, Card, CardItem, Button, Content, View } from 'native-base';
+import { Text, Card, CardItem, Button, Content, View } from 'native-base';
 
-interface Props {
+interface CardProps {
   name: string;
   image: string;
   btnName: string;
@@ -13,7 +13,7 @@ interface Props {
   onSelect<T>(param: T): void;
 }
 
-export const CardComponent: React.FC<Props> = ({
+export const CardComponent = ({
   name,
   image,
   btnName,
@@ -21,7 +21,7 @@ export const CardComponent: React.FC<Props> = ({
   full_day_price,
   half_day_price,
   onSelect,
-}): JSX.Element => {
+}: CardProps): JSX.Element => {
   const imageUrl = image
     ? image
     : 'https://www.dia.org/sites/default/files/No_Img_Avail.jpg';
