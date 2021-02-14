@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "deployFunctionsDev": "firebase use dev && firebase deploy --only functions",
+        "startRN": "cd rn && yarn start"
+    },
+    "dependencies": {},
+    "devDependencies": {}
+}

@@ -1,8 +1,12 @@
-import { https, Request, Response } from 'firebase-functions';
-import { stripeKey } from '../config';
+import { Request, Response } from 'firebase-functions';
+import { stripePublishableKey } from '../config';
 
-const checkoutHtmlPage = (stripePublicKey: string, sessionId: any) => {
-    return `<html>
+export const generateStripeCheckout = async (req: Request, res: Response) => {
+  res.send(checkoutHtmlPage(stripePublishableKey, req.query.sessionId));
+};
+
+function checkoutHtmlPage (stripePublicKey: string, sessionId: any) {
+  return `<html>
     <style>
       .flex-container {
           display: flex;
@@ -25,7 +29,7 @@ const checkoutHtmlPage = (stripePublicKey: string, sessionId: any) => {
           </div>
           <script>
             (function () {
-              var stripe = Stripe('${stripePublicKey}');
+              const stripe = Stripe('${stripePublicKey}');
               window.onload = function () {
                 stripe.redirectToCheckout({
                   sessionId: '${sessionId}'
@@ -41,9 +45,4 @@ const checkoutHtmlPage = (stripePublicKey: string, sessionId: any) => {
           </script>
         </body>
       </html>`;
-  };
-
-  export const generateStripeCheckout = https.onRequest((req: Request, res: Response) => {
-    res.send(checkoutHtmlPage(stripeKey, req.query.sessionId)); 
-  }); 
-  
+};
