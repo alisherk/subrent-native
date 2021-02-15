@@ -5,7 +5,6 @@ import {
   ViewStyle
 } from 'react-native';
 
-
 interface TouchableProps {
   children: React.ReactNode;
   onPress?: () => void;

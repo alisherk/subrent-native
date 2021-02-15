@@ -24,16 +24,18 @@ const SCREENS: Record<string, string> = {
   'My Store': 'My Store',
 };
 
-export const MainHeader: React.FC<StackHeaderProps> = ({
+export const MainHeader = ({
   scene,
   previous,
   navigation,
-}) => {
+}: StackHeaderProps) => {
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
 
-  const title = ( //@ts-ignore
-    scene.route.params?.category || scene.route.name
-  ).replace(/^\w/, (fl: string) => fl.toUpperCase());
+  const title = //@ts-ignore
+  (scene.route.params?.category || scene.route.name).replace(
+    /^\w/,
+    (fl: string) => fl.toUpperCase()
+  );
 
   const imageUrl = authedUser?.photoURL && authedUser.photoURL;
 
@@ -102,7 +104,7 @@ const defaultStyles = StyleSheet.create<Styles>({
   badgeStyle: {
     position: 'absolute',
     zIndex: 1,
-    marginLeft: 22, 
+    marginLeft: 22,
   },
   iconStyle: {
     color: Platform.OS === 'android' ? 'white' : 'black',

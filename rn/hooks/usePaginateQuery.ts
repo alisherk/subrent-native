@@ -1,19 +1,19 @@
 import { useReducer, useEffect, useRef } from 'react';
-import { RentalModel } from 'types';
+import { Rental } from 'types';
 
 enum ActionTypes {
   INITIAL_LOAD = 'INITIAL_LOAD',
   LOAD_MORE = 'LOAD_MORE',
   ERROR = 'ERROR',
-  RESET = 'RESET', 
-  RELOADING = 'RELOADING'
+  RESET = 'RESET',
+  RELOADING = 'RELOADING',
 }
 
 type State = {
   hasMore: boolean;
   triggerEffect: firebase.firestore.DocumentData | null;
   limit: number;
-  rentals: RentalModel[];
+  rentals: Rental[];
   lastLoaded: firebase.firestore.QueryDocumentSnapshot | null;
   loading: boolean;
   error: null | Error | string;
@@ -22,7 +22,7 @@ type State = {
 };
 
 type Action =
-    {
+  | {
       type: ActionTypes.INITIAL_LOAD;
       snapshot: firebase.firestore.QuerySnapshot;
       limit: number;
@@ -30,19 +30,19 @@ type Action =
   | { type: ActionTypes.LOAD_MORE }
   | { type: ActionTypes.ERROR; error: string }
   | { type: ActionTypes.RESET }
-  | { type: ActionTypes.RELOADING }
+  | { type: ActionTypes.RELOADING };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionTypes.INITIAL_LOAD: {
-      const rentals = [...state.rentals];   
+      const rentals = [...state.rentals];
       if (action.snapshot) {
         action.snapshot.forEach((doc) => {
           if (doc.data) {
-            const rental = doc.data() as Omit<RentalModel, 'id'> ;
+            const rental = doc.data() as Omit<Rental, 'id'>;
             rentals.push({
               id: doc.id,
-              ...rental, 
+              ...rental,
             });
           }
         });
@@ -78,19 +78,19 @@ function reducer(state: State, action: Action): State {
         error: action.error,
         loading: false,
       };
-     case ActionTypes.RELOADING: 
+    case ActionTypes.RELOADING:
       return {
-          ...state, 
-          reloading: true
-      }
-     case ActionTypes.RESET: 
+        ...state,
+        reloading: true,
+      };
+    case ActionTypes.RESET:
       return {
-          ...state, 
-          reloading: false, 
-          lastLoaded: null, 
-          rentals: [],
-          triggerEffect: null
-      }
+        ...state,
+        reloading: false,
+        lastLoaded: null,
+        rentals: [],
+        triggerEffect: null,
+      };
     default:
       return state;
   }
@@ -105,7 +105,7 @@ const initialState: State = {
   loading: true,
   error: null,
   hasMounted: false,
-  reloading: false
+  reloading: false,
 };
 
 export type PaginateHookData = {
@@ -115,7 +115,7 @@ export type PaginateHookData = {
   loading: boolean;
   reloading: boolean;
   hasMore: boolean;
-  rentals: RentalModel[];
+  rentals: Rental[];
 };
 export const usePaginateQuery = (
   query: firebase.firestore.Query,
@@ -123,10 +123,20 @@ export const usePaginateQuery = (
 ): PaginateHookData => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { lastLoaded, hasMore, triggerEffect, error, rentals, loading, reloading } = state;
+  const {
+    lastLoaded,
+    hasMore,
+    triggerEffect,
+    error,
+    rentals,
+    loading,
+    reloading,
+  } = state;
 
   const persisted = useRef<firebase.firestore.Query>(query);
-  const lastVisible = useRef<firebase.firestore.DocumentData | null>(lastLoaded);
+  const lastVisible = useRef<firebase.firestore.DocumentData | null>(
+    lastLoaded
+  );
 
   useEffect(() => {
     lastVisible.current = lastLoaded;
@@ -161,8 +171,8 @@ export const usePaginateQuery = (
   }
 
   function resetLoad() {
-      dispatch({ type: ActionTypes.RELOADING}); 
-      dispatch({ type: ActionTypes.RESET })
+    dispatch({ type: ActionTypes.RELOADING });
+    dispatch({ type: ActionTypes.RESET });
   }
 
   return {
@@ -172,6 +182,6 @@ export const usePaginateQuery = (
     loading,
     hasMore,
     rentals,
-    reloading
+    reloading,
   };
 };

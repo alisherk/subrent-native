@@ -2,7 +2,7 @@ import React from 'react';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { Header, Body, Title } from 'native-base';
 
-export const SimpleHeader: React.ComponentType<StackHeaderProps> = ({ scene }) => {
+export const SimpleHeader = ({ scene }: StackHeaderProps) => {
   return (
     <Header>
       <Body>
@@ -11,5 +11,3 @@ export const SimpleHeader: React.ComponentType<StackHeaderProps> = ({ scene }) =
     </Header>
   );
 };
-
-

@@ -68,10 +68,12 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <>
               <Form.TextInput
                 name='email'
-                errMsg='Valid email is required'
                 rules={{
-                  required: true,
-                  pattern: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
+                    message: 'Valid email is required',
+                  },
                 }}
                 placeholderText='Email'
               />
@@ -91,25 +93,31 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <>
               <Form.TextInput
                 name='username'
-                errMsg='Username is required'
-                rules={{ required: true }}
                 placeholderText='Username'
+                rules={{ required: 'Username is required' }}
               />
               <Form.TextInput
                 name='email'
-                errMsg='Valid email is required'
-                rules={{
-                  required: true,
-                  pattern: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
-                }}
                 placeholderText='Email'
+                rules={{
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
+                    message: 'Email appears incorrect',
+                  },
+                }}
               />
               <Form.TextInput
                 name='password'
-                errMsg='Valid password is required'
-                rules={{ required: true }}
                 placeholderText='Password'
                 secureTextEntry={true}
+                rules={{
+                  required: 'Valid password is required',
+                  pattern: {
+                    value: /^.{6,}$/,
+                    message: 'Password must be at least 6 characters long',
+                  },
+                }}
               />
               <Row style={styles.btnContainer}>
                 <Form.Button
@@ -127,19 +135,26 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <>
               <Form.TextInput
                 name='email'
-                errMsg='Valid email is required'
-                rules={{
-                  required: true,
-                  pattern: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
-                }}
                 placeholderText='Email'
+                rules={{
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
+                    message: 'Email appears incorrect',
+                  },
+                }}
               />
               <Form.TextInput
-                name='password'
-                errMsg='Valid password is required'
-                rules={{ required: true }}
                 placeholderText='Password'
                 secureTextEntry={true}
+                name='password'
+                rules={{
+                  required: 'Valid password is required',
+                  pattern: {
+                    value: /^.{6,}$/,
+                    message: 'Password must be at least 6 characters long',
+                  },
+                }}
               />
               <Row style={styles.btnContainer}>
                 <Form.Button

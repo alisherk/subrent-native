@@ -1,4 +1,5 @@
-import { RentalActions, PopulateRentalAction, Rental } from '../actions';
+import { RentalActions, PopulateRentalAction } from '../actions';
+import { Rental } from 'types'
 
 type RentalState = {
   fetchedRental: null | Rental;

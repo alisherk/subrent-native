@@ -2,8 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
 import { RentalScreenNavigationProp } from 'navigation';
-import { StyleSheet } from 'react-native';
-import { MapPreview } from '../../components/map-preview';
+import { StyleSheet, Platform } from 'react-native';
+import { MapPreview as Map } from 'components/map-preview';
 import {
   Container,
   Thumbnail,
@@ -13,6 +13,7 @@ import {
   Text,
   Button,
   Icon,
+  Row,
 } from 'native-base';
 
 interface RentalScreenProps {
@@ -25,10 +26,6 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
     (state: RootState) => state.rentals.fetchedRental!
   );
 
-  const imageUrl = rental?.ownerImage
-    ? rental.ownerImage
-    : 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png';
-
   const handlePress = (): void => {
     navigation.navigate('Checkout');
   };
@@ -38,27 +35,39 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
       <Content padder>
         <Card>
           <CardItem bordered>
-            <Thumbnail source={{ uri: imageUrl }} />
+            {rental?.ownerImage ? (
+              <Thumbnail source={{ uri: rental.ownerImage }} />
+            ) : (
+              <Icon name='person' style={styles.icon} />
+            )}
             <Text style={{ marginLeft: 5 }}>{rental.displayName}</Text>
           </CardItem>
           <CardItem bordered style={styles.priceRow}>
             <Text>Full day: ${`${rental.full_day_price}`}</Text>
             <Text>Half day: ${`${rental.half_day_price}`}</Text>
           </CardItem>
-          <CardItem bordered style={styles.rowStyle}>
-            <Text>Equipment: {rental.name} </Text>
+          <CardItem bordered>
+            <Text>{rental.name}</Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text> {rental.description} </Text>
           </CardItem>
           <CardItem bordered style={styles.rowStyle}>
-            <Text>Description: {rental.description}</Text>
+            <Text>{rental.region}</Text>
           </CardItem>
-          <CardItem bordered style={styles.rowStyle}>
-            <Text>Region: {rental.region}</Text>
-          </CardItem>
-          <CardItem bordered style={styles.rowStyle}>
-            <Text>
-              Delivery:{' '}
-              {rental.delivery === 'yes' ? 'Contact owner to arrange' : 'No'}
-            </Text>
+          <CardItem bordered style={{ justifyContent: 'space-evenly' }}>
+            <Row>
+              <Text>
+                {rental.delivery === 'yes'
+                  ? 'Please contact the owner before renting this item'
+                  : "You don't need to contact the owner to rent it"}
+              </Text>
+            </Row>
+            {rental.delivery === 'yes' ? (
+              <Button light>
+                <Text style={styles.msgBtnText}>Message</Text>
+              </Button>
+            ) : null}
           </CardItem>
           <CardItem style={styles.bottomRow}>
             <Button onPress={handlePress}>
@@ -67,7 +76,7 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
             </Button>
           </CardItem>
         </Card>
-        <MapPreview location={rental.g} />
+        <Map location={rental.g} />
       </Content>
     </Container>
   );
@@ -75,6 +84,11 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
 
 const styles = StyleSheet.create({
   rowStyle: { height: 50 },
+  colStyle: { height: 100, justifyContent: 'space-evenly' },
   bottomRow: { justifyContent: 'center' },
   priceRow: { justifyContent: 'space-evenly' },
+  msgBtnText: { color: 'white' },
+  icon: {
+    color: Platform.OS === 'android' ? 'white' : 'black',
+  },
 });

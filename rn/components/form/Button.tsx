@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ViewStyle, StyleSheet, StyleProp } from 'react-native';
+import { ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import * as NativeBase from 'native-base';
 
 export interface ButtonProps {
@@ -10,7 +10,8 @@ export interface ButtonProps {
   disabled?: boolean;
   icon?: boolean;
   iconName?: string;
-  style?: StyleProp<ViewStyle>;
+  btnstyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>
   [k: string]: any;
 }
 
@@ -22,6 +23,7 @@ export const Button = ({
   icon,
   iconName,
   style,
+  textStyle,
   ...rest
 }: ButtonProps): JSX.Element => {
   const context = useFormContext();
@@ -35,7 +37,7 @@ export const Button = ({
         {...rest}
       >
         {icon && <NativeBase.Icon name={iconName} />}
-        <NativeBase.Text>{buttonName}</NativeBase.Text>
+        <NativeBase.Text style={textStyle}>{buttonName}</NativeBase.Text>
       </NativeBase.Button>
     </NativeBase.View>
   );

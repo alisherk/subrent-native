@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { firestore } from 'firebase';
-import { RentalModel } from 'types';
+import { Rental } from 'types';
 
-type Data = RentalModel[];
+type Data = Rental[];
 type CollectionHook = [Data, boolean, Error | null];
 
 export const useCollection = (
@@ -23,7 +23,7 @@ export const useCollection = (
         return;
       }
       const results = snap.docs.map((doc) => {
-        const rental = doc.data() as RentalModel; 
+        const rental = doc.data() as Omit<Rental, 'id'>; 
         return {
           id: doc.id,
           ...rental

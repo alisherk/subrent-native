@@ -1,4 +1,4 @@
-export interface RentalModel {
+export interface Rental {
   [index: number]: { id: string };
   id: string;
   name: string;

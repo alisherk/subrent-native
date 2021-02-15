@@ -1,9 +1,10 @@
 import { firebase } from 'gateway';
 import { convertToFields, uploadImage } from '../utils';
-import { RentalActions, Rental, AppThunk, PopulateRentalAction } from './types';
+import { RentalActions, AppThunk, PopulateRentalAction } from './types';
 import { getLatLng } from '../../components/places-autocomplete';
 import { GeoDocumentReference, GeoDocumentSnapshot } from 'geofirestore';
 import cuid from 'cuid';
+import { Rental } from 'types';
 
 export const populateRental = (rental: Rental): PopulateRentalAction => ({
   type: RentalActions.POPULATE_RENTAL,

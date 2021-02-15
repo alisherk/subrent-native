@@ -1,5 +1,3 @@
-import { GoogleUser } from "expo-google-app-auth";
-
 export const isUserEqual = (googleUser: any, firebaseUser: firebase.User, firebase: any) => {
     if (firebaseUser) {
       const providerData = firebaseUser.providerData;

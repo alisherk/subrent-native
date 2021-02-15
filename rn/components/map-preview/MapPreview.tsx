@@ -6,8 +6,7 @@ interface MapPreviewProps {
   location: { geopoint: { U: number; k: number } };
 }
 
-export const MapPreview =  ({ location  } : MapPreviewProps ) => {
-
+export const MapPreview =  ({ location } : MapPreviewProps ) => {
   const region = {
     latitude: location?.geopoint.U ? location.geopoint.U : 49.8951 ,
     longitude: location?.geopoint.k ? location.geopoint.k : -97.1384,

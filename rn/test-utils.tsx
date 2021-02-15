@@ -7,12 +7,10 @@ import { PaginateHookData } from './hooks';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-
 //mock redux store cofig for dispathing action 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 export const returnWithStore = (args?: any) =>  mockStore(args);
-
 
 //testing libriary config for returning render with redux
 export function renderWithRedux(
@@ -50,7 +48,8 @@ export const mockRental = {
   delivery: 'test',
   image: 'test',
   instructions: 'test', 
-  confirmation_required: 'test'
+  confirmation_required: 'test',
+  g: { geopoint: { U: 1, k: 2 }}
 };
 
 export const mockPaginateHookReturn: PaginateHookData = {

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { FlatList } from 'react-native';
-import { ManageRentalScreenNavigationProp } from '../../navigation';
-import { usePaginateQuery } from '../../hooks';
+import { ManageRentalScreenNavigationProp } from 'navigation';
+import { usePaginateQuery } from 'hooks';
 import { firebase } from 'gateway';
-import { Card } from '../../components/card';
-import { Spinner } from '../../components/spinner';
-import { RentalModel } from 'types';
+import { Card } from 'components/card';
+import { Spinner } from 'components/spinner';
+import { Rental } from 'types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducers';
+import { RootState } from 'redux/reducers';
 import { Row, Text } from 'native-base';
 
 
@@ -43,7 +43,7 @@ export const ManageRentalScreen = ({ navigation }: ManageRentalProps) => {
     return unsubscribe;
   }, [navigation]);
 
-  const renderItem = ({ item }: { item: RentalModel }) => (
+  const renderItem = ({ item }: { item: Rental }) => (
     <Card
       {...item}
       btnName='Manage'

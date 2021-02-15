@@ -1,14 +1,27 @@
 import React from 'react';
 import { Item, Input, Row, Text, Label, View } from 'native-base';
-import { Controller, useFormContext, ValidationRules } from 'react-hook-form';
+import {
+  Controller,
+  useFormContext,
+  ValidationRule,
+  Message,
+} from 'react-hook-form';
+
+export type Rules = Partial<{
+  required: Message | ValidationRule<boolean>;
+  min: ValidationRule<number | string>;
+  max: ValidationRule<number | string>;
+  maxLength: ValidationRule<number | string>;
+  minLength: ValidationRule<number | string>;
+  pattern: ValidationRule<RegExp>;
+}>;
 
 export interface TextInputProps {
   name: string;
-  errMsg: string;
   defaultValue?: string;
   placeholderText?: string;
   label?: string;
-  rules: ValidationRules;
+  rules: Rules;
   secureTextEntry?: boolean;
   testID?: string;
 }
@@ -18,7 +31,6 @@ export const TextInput = ({
   name,
   rules,
   defaultValue = '',
-  errMsg,
   label,
   secureTextEntry,
   testID,
@@ -41,7 +53,11 @@ export const TextInput = ({
             {label && <Label> {label}</Label>}
           </Item>
           <Row style={{ marginLeft: 5 }}>
-            {errors[name] && <Text testID='error' style={{ color: 'red' }}>{errMsg}</Text>}
+            {errors[name] && (
+              <Text testID='error' style={{ color: 'red' }}>
+                {errors[name].message}
+              </Text>
+            )}
           </Row>
         </View>
       )}

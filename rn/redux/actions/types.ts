@@ -1,4 +1,4 @@
-import { RentalModel } from 'types';
+import { Rental } from 'types';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
 import { RootState } from '../reducers';
@@ -45,7 +45,6 @@ export type AuthAction =
   | GetUserAuthAction
   | ClearUserAuthAction;
 
-export interface Rental extends RentalModel {}
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

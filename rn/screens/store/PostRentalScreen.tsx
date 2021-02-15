@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { Row } from 'native-base';
-import { Alert, View } from 'react-native';
+import { Alert, View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { useDocument } from '../../hooks';
+import { useDocument } from 'hooks';
 import { firebase } from 'gateway';
-import { Spinner } from '../../components/spinner';
-import { Form, PickerOption } from '../../components/form';
-import { openCamera, getPermission, CAMERA } from '../utils';
+import { Spinner } from 'components/spinner';
+import { Form, PickerOption } from 'components/form';
 import { PostRentalScreenNavigationProp } from 'navigation';
-import { ImagePreview } from '../../components/image-preview';
-import * as actions from '../../redux/actions';
+import { ImagePreview } from 'components/image-preview';
+import { openCamera, getPermission, CAMERA } from '../utils';
+import * as actions from 'redux/actions';
 
 interface PostRentalScreenProps {
   navigation: PostRentalScreenNavigationProp;
   route: { params?: { rentalId: string } };
 }
 
-interface Data {
+interface FormValues {
   name: string;
   full_day_price: string;
   half_day_price: string;
@@ -53,7 +53,7 @@ export const PostRentalScreen = ({
     []
   );
 
-  const handleSubmit = async (data: Data): Promise<void> => {
+  const handleSubmit = async (data: FormValues): Promise<void> => {
     const rentalId: string = route.params?.rentalId!;
     try {
       if (rentalId) {
@@ -184,10 +184,10 @@ export const PostRentalScreen = ({
             defaultValue={doc?.region ? doc.region : ''}
           />
           <View
-            style={{ alignItems: 'center', justifyContent: 'space-evenly' }}
+            style={styles.container}
           >
             <ImagePreview
-              imagePreviewStyle={{ height: 200, width: 200 }}
+              imagePreviewStyle={styles.imagePreview}
               imageUri={imageUri || doc?.image!}
               handleOnPress={() => setImageUri(null)}
               deleteIcon={doc?.image ? false : true}
@@ -202,7 +202,7 @@ export const PostRentalScreen = ({
             />
           </View>
           {route.params?.rentalId ? (
-            <Row style={{ justifyContent: 'space-evenly', marginVertical: 20 }}>
+            <Row style={styles.btnGroupRow}>
               <Form.Button
                 disabled={!formState.isValid || formState.isSubmitting}
                 buttonName='Update'
@@ -213,6 +213,7 @@ export const PostRentalScreen = ({
                 disabled={!formState.isValid || formState.isSubmitting}
                 buttonName='Delete'
                 onSubmit={handleDelete}
+                textStyle={styles.deleteBtnText}
               />
             </Row>
           ) : (
@@ -220,7 +221,7 @@ export const PostRentalScreen = ({
               <Form.Button
                 full
                 disabled={!formState.isValid || formState.isSubmitting}
-                style={{ marginVertical: 10 }}
+                style={styles.submitBtn}
                 buttonName='Post Rental'
                 onSubmit={handleSubmit}
               />
@@ -231,3 +232,21 @@ export const PostRentalScreen = ({
     </Form>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center', justifyContent: 'space-evenly'
+  },
+  submitBtn: {
+    marginVertical: 10,
+  },
+  deleteBtnText: {
+    color: 'white',
+  },
+  btnGroupRow: {
+    justifyContent: 'space-evenly', marginVertical: 20
+  },
+  imagePreview: {
+    height: 200, width: 200 
+  }
+});

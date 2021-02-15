@@ -6,8 +6,9 @@ import 'firebase/functions';
 import { getEnvVariables } from 'env';
 import * as geofirestore from 'geofirestore';
 
-
-app.initializeApp(getEnvVariables().firebaseConfig);
+if (!app.apps.length) {
+  app.initializeApp(getEnvVariables().firebaseConfig);
+}
 
 class Firebase {
   private static instance: Firebase;

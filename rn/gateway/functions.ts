@@ -1,6 +1,5 @@
 import { createCallableFunction, Functions } from './utils';
 
-
 type StripeSessionParams = {
   duration: number;
   rentalId: string;

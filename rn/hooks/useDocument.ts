@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useRef } from 'react';
-import { RentalModel } from 'types';
+import { Rental } from 'types';
 import type firebase from 'firebase';
 
 enum ActionTypes {
@@ -12,7 +12,7 @@ enum ActionTypes {
 type Status = 'loading' | 'loaded' | 'error' | null;
 
 type State = {
-  data: RentalModel | null;
+  data: Rental | null;
   status: Status;
   error: string | null;
   stateUpdate: number;
@@ -69,7 +69,7 @@ const initialState: State = {
 type reload = () => void;
 
 export type useDocumentHookData = [
-  RentalModel | null,
+  Rental | null,
   Status,
   string | null,
   reload
