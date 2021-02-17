@@ -1,37 +1,37 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, SubmitHandler } from 'react-hook-form';
 import { ViewStyle, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import * as NativeBase from 'native-base';
 
-export interface ButtonProps {
+export interface ButtonProps<T> {
   buttonName: string;
-  onSubmit?: (data: any) => void;
+  onSubmit?: SubmitHandler<T>;
   handlePress?: () => void;
   disabled?: boolean;
   icon?: boolean;
   iconName?: string;
   btnstyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>
+  textStyle?: StyleProp<TextStyle>;
   [k: string]: any;
 }
 
-export const Button = ({
+export const Button = <TFormValues extends Record<string, any>> ({
   buttonName,
   onSubmit,
   handlePress,
   disabled,
   icon,
   iconName,
-  style,
+  btnstyle,
   textStyle,
   ...rest
-}: ButtonProps): JSX.Element => {
+}: ButtonProps<TFormValues>): JSX.Element => {
   const context = useFormContext();
 
   return (
     <NativeBase.View style={defaultStyles.buttonContainer}>
       <NativeBase.Button
-        style={[defaultStyles.button, style]}
+        style={[defaultStyles.button, btnstyle]}
         disabled={disabled}
         onPress={handlePress || (onSubmit && context.handleSubmit(onSubmit))}
         {...rest}

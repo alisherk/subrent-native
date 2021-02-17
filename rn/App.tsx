@@ -10,6 +10,7 @@ import { fixFirebaseTimer } from './timerFix';
 import { Root } from 'native-base';
 import * as Font from 'expo-font';
 import thunk from 'redux-thunk';
+import * as Notifications from 'expo-notifications';
 
 fixFirebaseTimer();
 
@@ -28,6 +29,14 @@ const fetchFonts = () => {
     Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
   });
 };
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);

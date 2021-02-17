@@ -1,13 +1,13 @@
 import React from 'react';
 import { PlacesAutoComplete, PlacesProps } from '../places-autocomplete';
 import { Row, Text, View } from 'native-base';
-import { Controller, useFormContext, ValidationRules } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
+import { Rules } from './types';
 
 export interface PlacesInputProps extends PlacesProps {
-  rules: ValidationRules;
-  errMsg: string;
+  rules: Rules;
   name: string;
-  timeToWait?: number; 
+  timeToWait?: number;
 }
 
 export const PlacesInput = ({
@@ -15,17 +15,15 @@ export const PlacesInput = ({
   requestOptions,
   placeholderText,
   rules,
-  errMsg,
-  timeToWait, 
-  defaultValue=''
+  timeToWait,
+  defaultValue = '',
 }: PlacesInputProps): JSX.Element => {
-
   const { errors, control, setValue } = useFormContext();
 
   const handleValidate = (text: string | null): void => {
     if (!text) {
       setValue(name, null, { shouldValidate: true });
-      return; 
+      return;
     }
     setValue(name, text, { shouldValidate: true });
   };
@@ -42,7 +40,9 @@ export const PlacesInput = ({
             defaultValue={defaultValue}
           />
           <Row style={{ marginLeft: 5 }}>
-            {errors[name] && <Text style={{ color: 'red' }}>{errMsg}</Text>}
+            {errors[name] && (
+              <Text style={{ color: 'red' }}>{errors[name].message}</Text>
+            )}
           </Row>
         </View>
       )}

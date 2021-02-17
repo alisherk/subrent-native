@@ -1,20 +1,7 @@
 import React from 'react';
+import { Rules } from './types';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Item, Input, Row, Text, Label, View } from 'native-base';
-import {
-  Controller,
-  useFormContext,
-  ValidationRule,
-  Message,
-} from 'react-hook-form';
-
-export type Rules = Partial<{
-  required: Message | ValidationRule<boolean>;
-  min: ValidationRule<number | string>;
-  max: ValidationRule<number | string>;
-  maxLength: ValidationRule<number | string>;
-  minLength: ValidationRule<number | string>;
-  pattern: ValidationRule<RegExp>;
-}>;
 
 export interface TextInputProps {
   name: string;

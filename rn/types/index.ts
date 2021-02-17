@@ -14,4 +14,5 @@ export interface Rental {
   instructions: string; 
   confirmation_required: string; 
   g:  { geopoint: { U: number, k: number}};
+  expoToken: string;
 }

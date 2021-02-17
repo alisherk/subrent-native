@@ -1,4 +1,4 @@
-import { calculate } from '../../public/utils';
+import { calculate } from '../../customer-screens/utils';
 
 describe('calculate function', () => {
 

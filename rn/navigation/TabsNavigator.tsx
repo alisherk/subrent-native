@@ -1,12 +1,12 @@
 import React from 'react';
 import { RootStackParamList } from './types';
-import { PublicNavigator } from './PublicNavigator';
+import { CustomerNavigator } from './CustomerNavigator';
 import { Icon } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 import {
-    createBottomTabNavigator,
-    BottomTabNavigationOptions,
-  } from '@react-navigation/bottom-tabs';
+  createBottomTabNavigator,
+  BottomTabNavigationOptions,
+} from '@react-navigation/bottom-tabs';
 
 type Icons = {
   [key: string]: string;
@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 export const TabsNavigator = (): JSX.Element => {
   return (
     <Tab.Navigator
-      screenOptions={({ route } : any): BottomTabNavigationOptions => ({
+      screenOptions={({ route }: any): BottomTabNavigationOptions => ({
         tabBarIcon: ({ color }) => {
           const icons: Icons = {
             Home: 'home',
@@ -32,7 +32,7 @@ export const TabsNavigator = (): JSX.Element => {
     >
       <Tab.Screen
         name='Home'
-        component={PublicNavigator}
+        component={CustomerNavigator}
         options={{
           tabBarButton: (props: any) => <TouchableOpacity {...props} />,
         }}

@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form } from 'components/form';
-import { LoginScreenNavigationProp } from 'navigation';
+import { LoginScreenProps } from 'navigation';
 import { Row } from 'native-base';
 import { Alert, StyleSheet, ViewStyle } from 'react-native';
 import * as actions from 'redux/actions';
 import { formatError } from '../utils';
+import { HeaderBackButton } from '@react-navigation/stack';
 
 enum Screens {
   SIGNUP = 'Signup',
   RESET = 'Reset password',
   LOGIN = 'Login',
-}
-
-interface LoginScreenProps {
-  navigation: LoginScreenNavigationProp;
-  route: LoginScreenNavigationProp;
 }
 
 interface Data {
@@ -27,6 +23,17 @@ interface Data {
 export const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const dispatch = useDispatch();
   const [screen, switchScreen] = useState<string>(Screens.LOGIN);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <HeaderBackButton
+          tintColor='white'
+          onPress={() => navigation.navigate('Home')}
+        />
+      ),
+    });
+  }, [navigation]);
 
   const handleSubmit = async (data: Data): Promise<void> => {
     try {

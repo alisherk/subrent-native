@@ -1,10 +1,10 @@
 import * as app from 'firebase/app';
+import * as geofirestore from 'geofirestore';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
 import 'firebase/functions';
 import { getEnvVariables } from 'env';
-import * as geofirestore from 'geofirestore';
 
 if (!app.apps.length) {
   app.initializeApp(getEnvVariables().firebaseConfig);
@@ -12,10 +12,10 @@ if (!app.apps.length) {
 
 class Firebase {
   private static instance: Firebase;
-  readonly db: firebase.firestore.Firestore;
-  readonly auth: firebase.auth.Auth;
-  readonly functions: firebase.functions.Functions;
-  readonly storage: firebase.storage.Storage;
+  readonly db: app.firestore.Firestore | any;
+  readonly auth: app.auth.Auth;
+  readonly functions: app.functions.Functions;
+  readonly storage: app.storage.Storage;
   readonly geofirestore: geofirestore.GeoFirestore;
 
   private constructor() {

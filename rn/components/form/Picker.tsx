@@ -1,7 +1,15 @@
 import React, { useEffect } from 'react';
 import { ViewStyle, TextStyle, StyleSheet } from 'react-native';
-import { Controller, useFormContext, ValidationRules } from 'react-hook-form';
-import * as NativeBase from 'native-base';
+import { Controller, useFormContext } from 'react-hook-form';
+import { Rules } from './types';
+import {
+  View,
+  Icon,
+  Text,
+  Item,
+  Row,
+  Picker as NativeBasePicker,
+} from 'native-base';
 
 console.disableYellowBox = true;
 
@@ -10,14 +18,13 @@ export type PickerOption = { id: number; label: string; value: string };
 export interface PickerInputProps {
   name: string;
   headerTitle: string;
-  errMsg: string;
   defaultValue?: string;
   placeholderText?: string;
   label?: string;
-  rules: ValidationRules;
+  rules: Rules;
   options: PickerOption[];
   specialMessage?: string;
-  testID?: string; 
+  testID?: string;
 }
 
 export const Picker = ({
@@ -25,8 +32,7 @@ export const Picker = ({
   headerTitle,
   placeholderText,
   rules,
-  defaultValue='',
-  errMsg,
+  defaultValue = '',
   options,
   specialMessage,
   testID,
@@ -47,38 +53,34 @@ export const Picker = ({
         };
 
         return (
-          <NativeBase.View style={defaultStyles.pickerContainer}>
-            <NativeBase.Item style={defaultStyles.item}>
-              <NativeBase.Text> {headerTitle}: </NativeBase.Text>
-              <NativeBase.Picker
-                iosIcon={<NativeBase.Icon name='arrow-down' />}
+          <View style={defaultStyles.pickerContainer}>
+            <Item style={defaultStyles.item}>
+              <Text> {headerTitle}: </Text>
+              <NativeBasePicker
+                iosIcon={<Icon name='arrow-down' />}
                 placeholder={placeholderText}
                 selectedValue={value}
                 onValueChange={(val) => handleOnChange(val)}
                 testID={testID}
               >
                 {options.map((option: PickerOption) => (
-                  <NativeBase.Picker.Item
+                  <NativeBasePicker.Item
                     key={option.id}
                     label={option.label}
                     value={option.value}
                   />
                 ))}
-              </NativeBase.Picker>
-            </NativeBase.Item>
-            <NativeBase.Row style={defaultStyles.row}>
+              </NativeBasePicker>
+            </Item>
+            <Row style={defaultStyles.row}>
               {errors[name] && (
-                <NativeBase.Text style={defaultStyles.error}>
-                  {errMsg}
-                </NativeBase.Text>
+                <Text style={defaultStyles.error}>{errors[name].message}</Text>
               )}
               {specialMessage && (
-                <NativeBase.Text style={defaultStyles.message}>
-                  {specialMessage}
-                </NativeBase.Text>
+                <Text style={defaultStyles.message}>{specialMessage}</Text>
               )}
-            </NativeBase.Row>
-          </NativeBase.View>
+            </Row>
+          </View>
         );
       }}
       name={name}

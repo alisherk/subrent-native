@@ -9,27 +9,25 @@ import { CheckBox } from './CheckBox';
 import { RadioInput } from './RadioInput';
 import { PlacesInput } from './PlacesInput';
 
-
 export type FormState = {
   isValid: boolean;
   isDirty: boolean;
-  isSubmitting: boolean; 
+  isSubmitting: boolean;
 };
 
 interface Props {
   children: (formState: FormState) => JSX.Element[] | JSX.Element;
-};
+}
 
-export const Form= ({
+export const Form = <TFormValues extends Record<string, any>>({
   children,
 }: Props): JSX.Element => {
-    
-  const methods = useForm({ mode: 'onChange' });
+  const methods = useForm<TFormValues>({ mode: 'onChange' });
 
   return (
     <Content padder>
       <FormProvider {...methods}>
-          <NativeBaseForm>{children(methods.formState)}</NativeBaseForm>      
+        <NativeBaseForm>{children(methods.formState)}</NativeBaseForm>
       </FormProvider>
     </Content>
   );

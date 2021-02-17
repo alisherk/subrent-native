@@ -1,4 +1,4 @@
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -11,15 +11,38 @@ export type RootStackParamList = {
   Rental: undefined;
   Checkout: undefined;
   Stripe: { sessionId: string };
-  'My Store': undefined;
+  'My Store': undefined | { screen: string };
   'My Rentals': undefined;
-  'Post Rental': { rentalId: string }; 
+  'My Messages': undefined;
+  'Contact Owner': undefined;
+  'Post Rental': { rentalId: string };
 };
 
-export type CategoryScreenNavigationProp = StackNavigationProp<
+export type StoreScreenProps = StackScreenProps<RootStackParamList, 'My Store'>;
+
+export type LoginScreenProps = StackScreenProps<
+  RootStackParamList,
+  'Login'
+>;
+
+export type ContactOwnerScreenProps = StackScreenProps<
+  RootStackParamList,
+  'Contact Owner'
+>;
+
+export type PostRentalScreenProps = StackScreenProps<
+  RootStackParamList,
+  'Post Rental'
+>;
+
+export type CategoryScreenProps = StackScreenProps<
   RootStackParamList,
   'Category'
 >;
+
+export type RentalScreenProps = StackScreenProps<RootStackParamList, 'Rental'>;
+
+
 export type HomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Home'
@@ -28,10 +51,7 @@ export type NotificationsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Notifications'
 >;
-export type RentalScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Rental'
->;
+
 export type CheckoutScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Checkout'
@@ -40,22 +60,12 @@ export type StripeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Stripe'
 >;
-export type StoreScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'My Store'
->;
+
 export type ManageRentalScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'My Rentals'
 >;
-export type LoginScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Login'
->;
-export type PostRentalScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Post Rental'
->;
+
 
 export type AppNavigationProp = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList, 'Home'>,

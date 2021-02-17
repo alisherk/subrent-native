@@ -1,7 +1,8 @@
 import React from 'react';
-import { MainHeader, SimpleHeader } from '../components/header';
-import * as PublicScreens from '../screens/public';
+import { MainHeader, SimpleHeader } from 'components/header';
+import * as CustomerScreens from '../screens/customer-screens';
 import { RootStackParamList } from './types';
+import { withAuth } from 'hoc/withAuth';
 import {
   createStackNavigator,
   StackHeaderProps,
@@ -9,47 +10,54 @@ import {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const PublicNavigator = (): JSX.Element => {
+export const CustomerNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator mode='card'>
       <Stack.Screen
         name='Home'
-        component={PublicScreens.HomeScreen}
+        component={CustomerScreens.HomeScreen}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}
       />
       <Stack.Screen
         name='Category'
-        component={PublicScreens.CategoryScreen}
+        component={CustomerScreens.CategoryScreen}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}
       />
       <Stack.Screen
         name='Notifications'
-        component={PublicScreens.NotificationScreen}
+        component={CustomerScreens.NotificationScreen}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}
       />
       <Stack.Screen
         name='Rental'
-        component={PublicScreens.RentalScreen}
+        component={CustomerScreens.RentalScreen}
+        options={{
+          header: (props: StackHeaderProps) => <MainHeader {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name='Contact Owner'
+        component={withAuth(CustomerScreens.ContactOwnerScreen)}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}
       />
       <Stack.Screen
         name='Checkout'
-        component={PublicScreens.CheckoutScreen}
+        component={CustomerScreens.CheckoutScreen}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}
       />
       <Stack.Screen
         name='Stripe'
-        component={PublicScreens.StripeScreen}
+        component={CustomerScreens.StripeScreen}
         options={{
           header: (props: StackHeaderProps) => <SimpleHeader {...props} />,
         }}

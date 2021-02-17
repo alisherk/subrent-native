@@ -1,12 +1,11 @@
 import React from 'react';
 import { RootStackParamList } from './types';
-import { MainHeader } from '../components/header';
-import * as StoreScreens from '../screens/store';
+import { MainHeader } from 'components/header';
+import * as StoreScreens from 'screens/store';
 import {
-    createStackNavigator,
-    StackHeaderProps,
-  } from '@react-navigation/stack';  
-
+  createStackNavigator,
+  StackHeaderProps,
+} from '@react-navigation/stack';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

@@ -4,3 +4,4 @@ export * from './CheckoutScreen';
 export * from './NotificationScreen';
 export * from './RentalScreen';
 export * from './StripeScreen';
+export * from './ContactOwnerScreen';

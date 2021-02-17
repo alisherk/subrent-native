@@ -2,12 +2,8 @@ import React from 'react';
 import { Card, H3 } from 'native-base';
 import { FlatList } from 'react-native';
 import { Touchable } from '../../components/touchable';
-import { StoreScreenNavigationProp } from '../../navigation';
+import { StoreScreenProps } from '../../navigation';
 
-interface Props {
-  navigation: StoreScreenNavigationProp;
-  route: StoreScreenNavigationProp;
-}
 type Screen = 'My Rentals' | 'Post Rental';
 
 type CardItem = {
@@ -21,7 +17,7 @@ const menu: CardItem[] = [
   { id: 2, title: 'Post rental', screen: 'Post Rental' },
 ];
 
-export const StoreScreen: React.FC<Props> = ({ navigation }): JSX.Element => {
+export const StoreScreen = ({ navigation }: StoreScreenProps): JSX.Element => {
   const handleSelect = (screen: Screen): void => navigation.navigate(screen);
 
   const renderItem = ({ item }: { item: CardItem }) => (

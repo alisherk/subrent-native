@@ -6,15 +6,10 @@ import { useDocument } from 'hooks';
 import { firebase } from 'gateway';
 import { Spinner } from 'components/spinner';
 import { Form, PickerOption } from 'components/form';
-import { PostRentalScreenNavigationProp } from 'navigation';
 import { ImagePreview } from 'components/image-preview';
-import { openCamera, getPermission, CAMERA } from '../utils';
+import { openCameraWithUserPermission } from 'utils/openCameraWithUserPermission';
 import * as actions from 'redux/actions';
-
-interface PostRentalScreenProps {
-  navigation: PostRentalScreenNavigationProp;
-  route: { params?: { rentalId: string } };
-}
+import { PostRentalScreenProps } from 'navigation';
 
 interface FormValues {
   name: string;
@@ -48,7 +43,7 @@ export const PostRentalScreen = ({
 
   const [doc, status] = useDocument(
     route.params?.rentalId
-      ? firebase.db.doc(`rentals/${route.params?.rentalId}`)
+      ? firebase.db.doc(`rentals/${route.params.rentalId}`)
       : null,
     []
   );
@@ -95,11 +90,7 @@ export const PostRentalScreen = ({
   };
 
   const handleOpenCamera = async () => {
-    const result = await openCamera({
-      getPermission,
-      permissions: [CAMERA],
-      allowsEditing: true,
-    });
+    const result = await openCameraWithUserPermission();
     if (result?.cancelled) return;
     const uri = result?.uri || null;
     setImageUri(uri);
@@ -113,8 +104,10 @@ export const PostRentalScreen = ({
         <>
           <Form.TextInput
             name='name'
-            errMsg='Minimum 4 letter equipment name is required'
-            rules={{ required: true, minLength: 4 }}
+            rules={{
+              required: 'Minimum 4 letter equipment name is required',
+              minLength: 4,
+            }}
             label='Equipment name'
             defaultValue={doc?.name}
             testID='input'
@@ -122,37 +115,38 @@ export const PostRentalScreen = ({
           <Form.TextInput
             name='full_day_price'
             label='Full day price'
-            errMsg='Full day price must be digits only'
-            rules={{ required: true, pattern: /^\d+(\.\d{1,2})?$/ }}
+            rules={{
+              required: 'Full day price must be digits only',
+              pattern: /^\d+(\.\d{1,2})?$/,
+            }}
             defaultValue={doc?.full_day_price}
           />
           <Form.TextInput
             name='half_day_price'
             label='Half day price'
-            errMsg='Half day price must be digits only'
-            rules={{ required: true, pattern: /^\d+(\.\d{1,2})?$/ }}
+            rules={{
+              required: 'Half day price must be digits only',
+              pattern: /^\d+(\.\d{1,2})?$/,
+            }}
             defaultValue={doc?.half_day_price}
           />
           <Form.TextInput
             name='description'
             label='Equipment descpription'
-            errMsg='Description required'
-            rules={{ required: true }}
+            rules={{ required: 'Equipment name is required' }}
             defaultValue={doc?.description}
           />
           <Form.TextInput
             name='instructions'
             label='Special instructions'
-            errMsg='Instructions are required'
-            rules={{ required: true }}
+            rules={{ required: 'Instructions are required' }}
             defaultValue={doc?.instructions}
           />
           <Form.Picker
             name='category'
             headerTitle='Equipment category'
             placeholderText='Select option'
-            errMsg='Selection is required'
-            rules={{ required: true }}
+            rules={{ required: 'Selection is required' }}
             options={CategoryOptions}
             defaultValue={doc?.category}
           />
@@ -160,8 +154,7 @@ export const PostRentalScreen = ({
             name='delivery'
             headerTitle='Willing to deliver'
             placeholderText='Select option'
-            errMsg='Selection is required'
-            rules={{ required: true }}
+            rules={{ required: 'Selection is required' }}
             options={YesNoOptions}
             defaultValue={doc?.delivery}
           />
@@ -169,8 +162,7 @@ export const PostRentalScreen = ({
             name='confirmation_required'
             headerTitle='Should confirm availability'
             placeholderText='Select option'
-            errMsg='Selection is required'
-            rules={{ required: true }}
+            rules={{ required: 'Selection is required' }}
             options={YesNoOptions}
             specialMessage='Yes means contact me before paying'
             defaultValue={doc?.confirmation_required}
@@ -179,13 +171,10 @@ export const PostRentalScreen = ({
             name='region'
             placeholderText='Postal Code or City'
             requestOptions={{ types: '(regions)', components: 'country:can' }}
-            rules={{ required: true }}
-            errMsg='City or Postal Code is required'
+            rules={{ required: 'City or Postal Code is required' }}
             defaultValue={doc?.region ? doc.region : ''}
           />
-          <View
-            style={styles.container}
-          >
+          <View style={styles.container}>
             <ImagePreview
               imagePreviewStyle={styles.imagePreview}
               imageUri={imageUri || doc?.image!}
@@ -235,7 +224,8 @@ export const PostRentalScreen = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center', justifyContent: 'space-evenly'
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   submitBtn: {
     marginVertical: 10,
@@ -244,9 +234,11 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   btnGroupRow: {
-    justifyContent: 'space-evenly', marginVertical: 20
+    justifyContent: 'space-evenly',
+    marginVertical: 20,
   },
   imagePreview: {
-    height: 200, width: 200 
-  }
+    height: 200,
+    width: 200,
+  },
 });

@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
 import { Row, Text } from 'native-base';
 
-
 const EmptyMessageContainer = (): JSX.Element => (
   <Row style={{ justifyContent: 'center', marginTop: '5%' }}>
     <Text> Time to post new rentals! </Text>

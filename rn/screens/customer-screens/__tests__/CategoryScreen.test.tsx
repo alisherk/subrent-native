@@ -1,6 +1,6 @@
 import React from 'react';
 import { CategoryScreen } from '..';
-import { firebase } from 'firebase/index';
+import { firebase } from 'firebase';
 import { renderWithRedux, createTestProps, mockPaginateHookReturn } from '../../../test-utils';
 import * as hooks from 'hooks/usePaginateQuery';
 

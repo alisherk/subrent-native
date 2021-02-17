@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
-import { RentalScreenNavigationProp } from 'navigation';
+import { RentalScreenProps } from 'navigation';
 import { StyleSheet, Platform } from 'react-native';
 import { MapPreview as Map } from 'components/map-preview';
 import {
@@ -16,18 +16,20 @@ import {
   Row,
 } from 'native-base';
 
-interface RentalScreenProps {
-  navigation: RentalScreenNavigationProp;
-  route: RentalScreenNavigationProp;
-}
-
 export const RentalScreen = ({ navigation }: RentalScreenProps) => {
-  const rental = useSelector(
-    (state: RootState) => state.rentals.fetchedRental!
-  );
+  const authedUser = useSelector((state: RootState) => state.auth.authedUser);
+  const rental = useSelector((state: RootState) => state.rentals.fetchedRental!);
 
-  const handlePress = (): void => {
+  const handleGoToCheckout = (): void => {
     navigation.navigate('Checkout');
+  };
+
+  const handleContactOwnerWithAuth = (): void => {
+/*     if (!authedUser) {
+      navigation.navigate('Login');
+      return;
+    } */
+    navigation.push('Contact Owner');
   };
 
   return (
@@ -40,7 +42,7 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
             ) : (
               <Icon name='person' style={styles.icon} />
             )}
-            <Text style={{ marginLeft: 5 }}>{rental.displayName}</Text>
+            <Text>{rental.displayName}</Text>
           </CardItem>
           <CardItem bordered style={styles.priceRow}>
             <Text>Full day: ${`${rental.full_day_price}`}</Text>
@@ -55,7 +57,7 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
           <CardItem bordered style={styles.rowStyle}>
             <Text>{rental.region}</Text>
           </CardItem>
-          <CardItem bordered style={{ justifyContent: 'space-evenly' }}>
+          <CardItem bordered style={styles.contactOwnerContainer}>
             <Row>
               <Text>
                 {rental.delivery === 'yes'
@@ -64,13 +66,13 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
               </Text>
             </Row>
             {rental.delivery === 'yes' ? (
-              <Button light>
+              <Button light onPress={handleContactOwnerWithAuth}>
                 <Text style={styles.msgBtnText}>Message</Text>
               </Button>
             ) : null}
           </CardItem>
           <CardItem style={styles.bottomRow}>
-            <Button onPress={handlePress}>
+            <Button onPress={handleGoToCheckout}>
               <Icon active name='cart' />
               <Text>Rent this equipment </Text>
             </Button>
@@ -83,6 +85,7 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
 };
 
 const styles = StyleSheet.create({
+  contactOwnerContainer: { justifyContent: 'space-evenly' },
   rowStyle: { height: 50 },
   colStyle: { height: 100, justifyContent: 'space-evenly' },
   bottomRow: { justifyContent: 'center' },

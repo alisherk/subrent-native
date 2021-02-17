@@ -1,10 +1,11 @@
 import { firebase } from 'gateway';
 import { convertToFields, uploadImage } from '../utils';
 import { RentalActions, AppThunk, PopulateRentalAction } from './types';
-import { getLatLng } from '../../components/places-autocomplete';
+import { getLatLng } from 'components/places-autocomplete';
 import { GeoDocumentReference, GeoDocumentSnapshot } from 'geofirestore';
-import cuid from 'cuid';
+import { getTokenWithUserPermission } from 'utils/getTokenWithUserPermission';
 import { Rental } from 'types';
+import cuid from 'cuid';
 
 export const populateRental = (rental: Rental): PopulateRentalAction => ({
   type: RentalActions.POPULATE_RENTAL,
@@ -36,7 +37,6 @@ export const uploadRental = (params: IUploadRentalParams): AppThunk => async (
   const imageName = `${rentalDocRef.id}_` + cuid();
   try {
     let downloadUrl: string | null = null;
-
     if (params.imageUri)
       downloadUrl = await uploadImage(
         params.imageUri,
@@ -52,7 +52,8 @@ export const uploadRental = (params: IUploadRentalParams): AppThunk => async (
       params.data.full_day_price,
       params.data.half_day_price
     );
-    await rentalDocRef.set({
+    const expoToken = await getTokenWithUserPermission(); 
+     await rentalDocRef.set({
       ...params.data,
       displayName: authedUser?.displayName,
       ownerImage: authedUser?.photoURL,
@@ -62,7 +63,8 @@ export const uploadRental = (params: IUploadRentalParams): AppThunk => async (
       status: 'active',
       search_fields,
       coordinates,
-    });
+      expoToken
+    }); 
   } catch (err) {
     throw err;
   }

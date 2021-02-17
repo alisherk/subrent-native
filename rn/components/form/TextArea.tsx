@@ -1,15 +1,19 @@
 import React from 'react';
 import { Row, Text, Item, Textarea as NativeBaseTextArea } from 'native-base';
-import { Controller, useFormContext, ValidationRules } from 'react-hook-form';
+import { Rules } from './types';
+import {
+  Controller,
+  useFormContext,
+} from 'react-hook-form';
+
 
 export interface TextAreaProps {
   name: string;
   rows: number;
-  errMsg: string;
   defaultValue?: string;
   placeholderText?: string;
   label?: string;
-  rules: ValidationRules;
+  rules: Rules;
 }
 
 export const TextArea = ({
@@ -17,8 +21,7 @@ export const TextArea = ({
   name,
   rules,
   defaultValue = '',
-  errMsg,
-  rows
+  rows,
 }: TextAreaProps): JSX.Element => {
   const { errors, control } = useFormContext();
   return (
@@ -26,17 +29,17 @@ export const TextArea = ({
       <Controller
         control={control}
         render={({ onChange, value, onBlur }) => (
-          <Item> 
-          <NativeBaseTextArea
-            rowSpan={rows}
-            bordered
-            underline
-            onChangeText={(value) => onChange(value)}
-            value={value}
-            onBlur={onBlur}
-            placeholder={placeholderText}
-            style={{ width: '100%'}}
-          />
+          <Item>
+            <NativeBaseTextArea
+              rowSpan={rows}
+              bordered
+              underline
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              onBlur={onBlur}
+              placeholder={placeholderText}
+              style={{ width: '100%' }}
+            />
           </Item>
         )}
         name={name}
@@ -44,7 +47,9 @@ export const TextArea = ({
         defaultValue={defaultValue}
       />
       <Row style={{ marginLeft: 15, padding: 5 }}>
-        {errors[name] && <Text style={{ color: 'red' }}>{errMsg}</Text>}
+        {errors[name] && (
+          <Text style={{ color: 'red' }}>{errors[name].message}</Text>
+        )}
       </Row>
     </>
   );
