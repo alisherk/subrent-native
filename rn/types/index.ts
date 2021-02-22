@@ -10,6 +10,7 @@ export interface Rental {
   region: string; 
   delivery: string;
   ownerImage: string;
+  ownerUid: string;
   displayName: string; 
   instructions: string; 
   confirmation_required: string; 

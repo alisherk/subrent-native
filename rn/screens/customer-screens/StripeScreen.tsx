@@ -1,15 +1,10 @@
 import React from 'react';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 import { getEnvVariables } from 'env';
-import { StripeScreenNavigationProp } from 'navigation';
+import { StripeScreenProps } from 'navigation';
 import { Toast } from 'native-base';
 
-interface StripePageProps {
-  navigation: StripeScreenNavigationProp;
-  route: { params: { sessionId: string } };
-}
-
-export const StripeScreen = ({ route, navigation }: StripePageProps) => {
+export const StripeScreen = ({ route, navigation }: StripeScreenProps) => {
   const handleChange = (e: WebViewNavigation): void => {
     if (!e.loading && e.url === `${getEnvVariables().successPaymentUrl}`) {
       navigation.navigate('Rental');

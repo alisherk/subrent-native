@@ -5,19 +5,11 @@ import { createStripeSession } from 'gateway/functions';
 import { calculate, calculationResult } from './utils';
 import { Spinner } from 'components/spinner';
 import { RadioInput, RadioOption } from 'components/form';
-import { Rental } from 'redux/actions';
+import { Rental } from 'types';
 import { RootState } from 'redux/reducers';
 import { CheckoutScreenNavigationProp } from 'navigation';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {
-  Container,
-  Text,
-  Content,
-  Button,
-  Card,
-  CardItem,
-  Row,
-} from 'native-base';
+import { Container, Text, Content, Button, Card, CardItem } from 'native-base';
 
 const PriceOptions: RadioOption[] = [
   {
@@ -138,6 +130,7 @@ export const CheckoutScreen = ({
   const rental = useSelector(
     (state: RootState) => state.rentals.fetchedRental!
   );
+  const authedUser = useSelector((state: RootState) => state.auth.authedUser);
 
   const handleDateChange = (date: Date | undefined) => (type: string) => {
     dispatch({ type: ActionTypes.SET_DATE, dateType: type, value: date });
@@ -155,6 +148,16 @@ export const CheckoutScreen = ({
   };
 
   const handleProceedToNext = async () => {
+    if (!authedUser) {
+      navigation.navigate('Login', { origin: 'Checkout' });
+      return;
+    }
+
+    if (rental.confirmation_required === 'yes') {
+      navigation.navigate('Contact Owner');
+      return;
+    }
+
     if (duration <= 0) {
       return Alert.alert(
         'Incorrect dates',
@@ -180,7 +183,7 @@ export const CheckoutScreen = ({
           {
             text: 'Login',
             style: 'destructive',
-            onPress: () => navigation.navigate('Login'),
+            onPress: () => navigation.navigate('Login', { origin: 'Checkout' }),
           },
         ]);
       }
@@ -226,8 +229,19 @@ export const CheckoutScreen = ({
           <CardItem footer style={styles.bottomRow}>
             <Text> TOTAL: ${total.toFixed(2)} </Text>
             <Button onPress={handleProceedToNext}>
-              <Text> Proceed further </Text>
+              <Text>
+                {rental.confirmation_required === 'yes'
+                  ? 'Contact Owner'
+                  : 'Proceed to Pay'}
+              </Text>
             </Button>
+          </CardItem>
+          <CardItem footer>
+            <Text>
+              {rental.confirmation_required === 'yes'
+                ? 'You need to contact the owner to confirm availability'
+                : "You don't need to contact the owner"}
+            </Text>
           </CardItem>
         </Card>
       </Content>

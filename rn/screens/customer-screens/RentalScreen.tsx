@@ -4,6 +4,7 @@ import { RootState } from 'redux/reducers';
 import { RentalScreenProps } from 'navigation';
 import { StyleSheet, Platform } from 'react-native';
 import { MapPreview as Map } from 'components/map-preview';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   Container,
   Thumbnail,
@@ -17,19 +18,21 @@ import {
 } from 'native-base';
 
 export const RentalScreen = ({ navigation }: RentalScreenProps) => {
+  const rental = useSelector(
+    (state: RootState) => state.rentals.fetchedRental!
+  );
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
-  const rental = useSelector((state: RootState) => state.rentals.fetchedRental!);
 
   const handleGoToCheckout = (): void => {
     navigation.navigate('Checkout');
   };
 
   const handleContactOwnerWithAuth = (): void => {
-/*     if (!authedUser) {
-      navigation.navigate('Login');
+    if (authedUser) {
+      navigation.navigate('Contact Owner');
       return;
-    } */
-    navigation.push('Contact Owner');
+    }
+    navigation.navigate('Login', { origin: 'Contact Owner' });
   };
 
   return (
@@ -42,7 +45,7 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
             ) : (
               <Icon name='person' style={styles.icon} />
             )}
-            <Text>{rental.displayName}</Text>
+            <Text style={styles.text}>{rental.displayName}</Text>
           </CardItem>
           <CardItem bordered style={styles.priceRow}>
             <Text>Full day: ${`${rental.full_day_price}`}</Text>
@@ -60,16 +63,14 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
           <CardItem bordered style={styles.contactOwnerContainer}>
             <Row>
               <Text>
-                {rental.delivery === 'yes'
+                {rental.confirmation_required === 'yes'
                   ? 'Please contact the owner before renting this item'
                   : "You don't need to contact the owner to rent it"}
               </Text>
             </Row>
-            {rental.delivery === 'yes' ? (
-              <Button light onPress={handleContactOwnerWithAuth}>
-                <Text style={styles.msgBtnText}>Message</Text>
-              </Button>
-            ) : null}
+            <TouchableOpacity onPress={handleContactOwnerWithAuth}>
+              <Icon name='mail' style={styles.icon} />
+            </TouchableOpacity>
           </CardItem>
           <CardItem style={styles.bottomRow}>
             <Button onPress={handleGoToCheckout}>
@@ -91,7 +92,9 @@ const styles = StyleSheet.create({
   bottomRow: { justifyContent: 'center' },
   priceRow: { justifyContent: 'space-evenly' },
   msgBtnText: { color: 'white' },
+  text: { marginLeft: 5 },
   icon: {
-    color: Platform.OS === 'android' ? 'white' : 'black',
+    color: Platform.OS === 'android' ? 'white' : 'gray',
+    margin: 5,
   },
 });

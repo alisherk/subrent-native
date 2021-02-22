@@ -1,69 +1,126 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { Alert, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { Form } from 'components/form';
+import { LoginFields } from './LoginFields';
+import { SignUpFields } from './SignUpFields';
+import { ResetPasswordScreen } from './ResetPasswordScreen';
 import { LoginScreenProps } from 'navigation';
-import { Row } from 'native-base';
-import { Alert, StyleSheet, ViewStyle } from 'react-native';
-import * as actions from 'redux/actions';
+import { Row, Toast } from 'native-base';
 import { formatError } from '../utils';
 import { HeaderBackButton } from '@react-navigation/stack';
+import { useDispatch } from 'react-redux';
+import * as actions from 'redux/actions';
 
 enum Screens {
-  SIGNUP = 'Signup',
-  RESET = 'Reset password',
+  SIGNUP = 'Sign up',
+  RESET_PASSWORD = 'Reset password',
   LOGIN = 'Login',
 }
 
-interface Data {
+interface FormValues {
   email: string;
   password: string;
   username: string;
 }
 
-export const LoginScreen = ({ navigation }: LoginScreenProps) => {
+const RenderInputByScreen = ({
+  screen,
+  onPress,
+}: {
+  screen: Screens;
+  onPress?: () => void;
+}): JSX.Element => {
+  if (screen === Screens.SIGNUP) {
+    return <SignUpFields />;
+  }
+  if (screen === Screens.RESET_PASSWORD) {
+    return <ResetPasswordScreen />;
+  }
+  return <LoginFields onPress={onPress} />;
+};
+
+export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
   const dispatch = useDispatch();
-  const [screen, switchScreen] = useState<string>(Screens.LOGIN);
+  const [screen, setScreen] = useState(Screens.LOGIN);
+
+  const originRoute = route.params?.origin || 'Home';
+
+  const handleSwitchScreen = (passedScreen?: Screens): void => {
+    //navigate to desired screen passed as an argument
+    let starterScreen = Screens.LOGIN;
+    if (passedScreen) {
+      starterScreen = passedScreen;
+      setScreen(starterScreen);
+      navigation.setOptions({ title: starterScreen });
+      return;
+    }
+    //when no argument exists, switch the screen based on current screen state
+    if (screen === Screens.LOGIN) {
+      starterScreen = Screens.SIGNUP;
+      setScreen(starterScreen);
+      navigation.setOptions({ title: starterScreen });
+      return;
+    }
+    setScreen(starterScreen);
+    navigation.setOptions({ title: starterScreen });
+  };
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <HeaderBackButton
           tintColor='white'
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => {
+            navigation.navigate(originRoute);
+            handleSwitchScreen(Screens.LOGIN);
+          }}
         />
       ),
     });
   }, [navigation]);
 
-  const handleSubmit = async (data: Data): Promise<void> => {
+  const handleSubmit = async (formValues: FormValues): Promise<void> => {
     try {
-      if (screen === Screens.RESET) {
-        await dispatch(actions.sendPasswordReset(data.email));
-        Alert.alert(
-          'Success',
-          'Please check your email to reset your password'
-        );
+      if (screen === Screens.RESET_PASSWORD) {
+        await dispatch(actions.sendPasswordReset(formValues.email));
+        Toast.show({
+            text: 'Success. Check your inbox for further instruction',
+            buttonText: 'OK',
+            duration: 4000,
+          });
         return;
       }
-      if (screen === Screens.SIGNUP) await dispatch(actions.registerUser(data));
-      else await dispatch(actions.loginUser(data));
-      Alert.alert('Success', 'Your are logged in.');
+      if (screen === Screens.SIGNUP) {
+        await dispatch(actions.registerUser(formValues));
+      } else await dispatch(actions.loginUser(formValues));
+      Toast.show({
+        text: 'Success. You are logged in!',
+        buttonText: 'OK',
+        duration: 4000,
+      });
     } catch (err) {
-      Alert.alert('Error', formatError(err));
+      Toast.show({
+        text: formatError(err),
+        buttonText: 'OK',
+        duration: 4000,
+      });
     }
-  };
-
-  const handleSwitchScreen = (screen: string): void => {
-    switchScreen(screen);
-    navigation.setOptions({ title: screen });
   };
 
   const handleLoginWithGoogle = async (): Promise<void> => {
     try {
       await dispatch(actions.loginWithGoogle());
-      Alert.alert('Success!', 'Your are logged in.');
+      Toast.show({
+        text: 'Success. You are logged in!',
+        buttonText: 'OK',
+        duration: 4000,
+      });
     } catch (err) {
-      Alert.alert('Error', 'Could not login with Google.');
+      Toast.show({
+        text: 'Oops. Could not sign you in with Google',
+        buttonText: 'OK',
+        duration: 4000,
+      });
     }
   };
 
@@ -71,115 +128,21 @@ export const LoginScreen = ({ navigation }: LoginScreenProps) => {
     <Form>
       {(formState) => (
         <>
-          {screen === Screens.RESET ? (
-            <>
-              <Form.TextInput
-                name='email'
-                rules={{
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
-                    message: 'Valid email is required',
-                  },
-                }}
-                placeholderText='Email'
-              />
-              <Row style={styles.btnContainer}>
-                <Form.Button
-                  buttonName='Reset password'
-                  disabled={!formState?.isValid || formState?.isSubmitting}
-                  onSubmit={handleSubmit}
-                />
-                <Form.Button
-                  buttonName='Go back'
-                  onPress={() => handleSwitchScreen(Screens.LOGIN)}
-                />
-              </Row>
-            </>
-          ) : screen === Screens.SIGNUP ? (
-            <>
-              <Form.TextInput
-                name='username'
-                placeholderText='Username'
-                rules={{ required: 'Username is required' }}
-              />
-              <Form.TextInput
-                name='email'
-                placeholderText='Email'
-                rules={{
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
-                    message: 'Email appears incorrect',
-                  },
-                }}
-              />
-              <Form.TextInput
-                name='password'
-                placeholderText='Password'
-                secureTextEntry={true}
-                rules={{
-                  required: 'Valid password is required',
-                  pattern: {
-                    value: /^.{6,}$/,
-                    message: 'Password must be at least 6 characters long',
-                  },
-                }}
-              />
-              <Row style={styles.btnContainer}>
-                <Form.Button
-                  buttonName='Submit'
-                  disabled={!formState?.isValid || formState?.isSubmitting}
-                  onSubmit={handleSubmit}
-                />
-                <Form.Button
-                  buttonName='Go back'
-                  onPress={() => handleSwitchScreen(Screens.LOGIN)}
-                />
-              </Row>
-            </>
-          ) : (
-            <>
-              <Form.TextInput
-                name='email'
-                placeholderText='Email'
-                rules={{
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[a-z\d.-]+@[a-z\d.-]+\.[a-z]{2,3}$/,
-                    message: 'Email appears incorrect',
-                  },
-                }}
-              />
-              <Form.TextInput
-                placeholderText='Password'
-                secureTextEntry={true}
-                name='password'
-                rules={{
-                  required: 'Valid password is required',
-                  pattern: {
-                    value: /^.{6,}$/,
-                    message: 'Password must be at least 6 characters long',
-                  },
-                }}
-              />
-              <Row style={styles.btnContainer}>
-                <Form.Button
-                  buttonName='Submit'
-                  disabled={!formState?.isValid || formState?.isSubmitting}
-                  onSubmit={handleSubmit}
-                />
-                <Form.Button
-                  buttonName='Sign up'
-                  onPress={() => handleSwitchScreen(Screens.SIGNUP)}
-                />
-                <Form.Button
-                  buttonName='Reset'
-                  onPress={() => handleSwitchScreen(Screens.RESET)}
-                />
-              </Row>
-            </>
-          )}
+          <RenderInputByScreen
+            screen={screen}
+            onPress={() => handleSwitchScreen(Screens.RESET_PASSWORD)}
+          />
+          <Row style={styles.btnContainer}>
+            <Form.Button
+              buttonName='Submit'
+              disabled={!formState?.isValid || formState?.isSubmitting}
+              onSubmit={handleSubmit}
+            />
+            <Form.Button
+              buttonName={screen === Screens.LOGIN ? 'Sign up' : 'Go back'}
+              onPress={() => handleSwitchScreen()}
+            />
+          </Row>
           <Row style={styles.googleBtnContainer}>
             <Form.Button
               danger

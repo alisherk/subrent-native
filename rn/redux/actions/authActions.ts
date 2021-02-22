@@ -1,6 +1,5 @@
 import { firebase } from 'gateway';
 import { Dispatch } from 'redux';
-import { Alert } from 'react-native';
 import { getEnvVariables } from 'env';
 import * as Google from 'expo-google-app-auth';
 import { storeUserAuthData, getUserAuthData, removeUserAuth } from '../utils';
@@ -155,5 +154,4 @@ export const signOut = () => async (dispatch: Dispatch): Promise<void> => {
   await firebase.auth.signOut();
   removeUserAuth();
   dispatch<ClearUserAuthAction>({ type: AuthActionTypes.CLEAR_USER_AUTH });
-  Alert.alert('Logged out', 'Thank you for using SubRent');
 };

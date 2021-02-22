@@ -1,4 +1,4 @@
-import { getEnvVariables } from '../../env';
+import { getEnvVariables } from 'env';
 
 type ResultArr = [{ long_name: string; short_name: string; types: [string] }];
 

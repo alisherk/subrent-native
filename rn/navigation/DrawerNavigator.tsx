@@ -3,11 +3,10 @@ import { RootStackParamList } from './types';
 import { StoreNavigator } from './StoreNavigator';
 import { TabsNavigator } from './TabsNavigator';
 import { LoginNavigator } from './LoginNavigator';
-import { Icon, Button, Text } from 'native-base';
+import { Icon, Button, Text, Toast } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/reducers';
 import { signOut } from '../redux/actions';
-import { DrawerActions } from '@react-navigation/native';
 import {
   createDrawerNavigator,
   DrawerItemList,
@@ -23,13 +22,19 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 
 export const DrawerNavigator = (): JSX.Element => {
   const dispatch = useDispatch();
-
-  const handleLogout = ({ navigation }: DrawerContentComponentProps): void => {
-    dispatch(signOut());
-    navigation.dispatch(DrawerActions.closeDrawer());
-  };
-
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
+
+  const handleLogout = async ({
+    navigation,
+  }: DrawerContentComponentProps): Promise<void> => {
+    await dispatch(signOut());
+    navigation.closeDrawer();
+    Toast.show({
+      text: 'Success. Check your inbox for further instruction',
+      buttonText: 'OK',
+      duration: 4000,
+    });
+  };
 
   return (
     <Drawer.Navigator
@@ -58,7 +63,7 @@ export const DrawerNavigator = (): JSX.Element => {
             name='Home'
             component={TabsNavigator}
             options={{
-              drawerIcon: ({ color }: Color ) => (
+              drawerIcon: ({ color }: Color) => (
                 <Icon name='home' style={{ color }} />
               ),
             }}
@@ -67,7 +72,9 @@ export const DrawerNavigator = (): JSX.Element => {
             name='My Store'
             component={StoreNavigator}
             options={{
-              drawerIcon: ({ color } : Color ) => <Icon name='cart' style={{ color }} />,
+              drawerIcon: ({ color }: Color) => (
+                <Icon name='cart' style={{ color }} />
+              ),
             }}
           />
         </>
@@ -77,14 +84,16 @@ export const DrawerNavigator = (): JSX.Element => {
             name='Home'
             component={TabsNavigator}
             options={{
-              drawerIcon: ({ color } : Color ) => <Icon name='home' style={{ color }} />,
+              drawerIcon: ({ color }: Color) => (
+                <Icon name='home' style={{ color }} />
+              ),
             }}
           />
           <Drawer.Screen
             name='Login'
             component={LoginNavigator}
             options={{
-              drawerIcon: ({ color } : Color ) => (
+              drawerIcon: ({ color }: Color) => (
                 <Icon name='log-in' style={{ color }} />
               ),
             }}

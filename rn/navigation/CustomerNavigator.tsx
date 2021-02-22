@@ -1,8 +1,7 @@
 import React from 'react';
 import { MainHeader, SimpleHeader } from 'components/header';
-import * as CustomerScreens from '../screens/customer-screens';
+import * as CustomerScreens from 'screens/customer-screens';
 import { RootStackParamList } from './types';
-import { withAuth } from 'hoc/withAuth';
 import {
   createStackNavigator,
   StackHeaderProps,
@@ -43,7 +42,7 @@ export const CustomerNavigator = (): JSX.Element => {
       />
       <Stack.Screen
         name='Contact Owner'
-        component={withAuth(CustomerScreens.ContactOwnerScreen)}
+        component={CustomerScreens.ContactOwnerScreen}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}

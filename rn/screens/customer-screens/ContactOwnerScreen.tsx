@@ -2,7 +2,8 @@ import React from 'react';
 import { Form } from 'components/form';
 import { ContactOwnerScreenProps } from 'navigation';
 import { getEnvVariables } from 'env';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { contactOwner } from 'redux/actions';
 import { RootState } from 'redux/reducers';
 import {
   Content,
@@ -22,25 +23,30 @@ type FormValues = {
 export const ContactOwnerScreen = ({
   navigation,
 }: ContactOwnerScreenProps): JSX.Element => {
+  const dispatch = useDispatch();
   const rental = useSelector(
     (state: RootState) => state.rentals.fetchedRental!
   );
 
-  const handleSubmit = (formValues: FormValues) => {
-    fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        host: 'exp.host',
-        accept: 'application/json',
-        'accept-encoding': 'gzip, deflate',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        to: rental.expoToken,
-        title: 'Message from customer',
-        body: formValues.message,
-      }),
-    });
+  const handleSubmit = async ({ message }: FormValues) => {
+    await dispatch(contactOwner(message));
+
+    if (rental?.expoToken) {
+      fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          host: 'exp.host',
+          accept: 'application/json',
+          'accept-encoding': 'gzip, deflate',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: rental.expoToken,
+          title: 'Message from customer',
+          body: message,
+        }),
+      });
+    }
   };
   return (
     <Form<FormValues>>

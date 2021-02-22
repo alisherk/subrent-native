@@ -12,7 +12,7 @@ if (!app.apps.length) {
 
 class Firebase {
   private static instance: Firebase;
-  readonly db: app.firestore.Firestore | any;
+  readonly db: app.firestore.Firestore;
   readonly auth: app.auth.Auth;
   readonly functions: app.functions.Functions;
   readonly storage: app.storage.Storage;
@@ -23,6 +23,7 @@ class Firebase {
     this.auth = app.auth();
     this.functions = app.functions();
     this.storage = app.storage();
+    //@ts-ignore
     this.geofirestore = geofirestore.initializeApp(this.db);
   }
 

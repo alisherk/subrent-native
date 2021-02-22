@@ -2,46 +2,50 @@ import React from 'react';
 import { Rules } from './types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Item, Input, Row, Text, Label, View } from 'native-base';
+import {
+  TextInputProps as InputProps,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
-export interface TextInputProps {
+export interface TextInputProps extends InputProps {
   name: string;
-  defaultValue?: string;
-  placeholderText?: string;
-  label?: string;
   rules: Rules;
-  secureTextEntry?: boolean;
-  testID?: string;
+  defaultValue?: string;
+  label?: string;
+  inputContainerStyle?: StyleProp<ViewStyle>;
+  errorContainerStyle?: StyleProp<TextStyle>;
 }
 
 export const TextInput = ({
-  placeholderText,
   name,
   rules,
   defaultValue = '',
   label,
-  secureTextEntry,
-  testID,
+  inputContainerStyle,
+  errorContainerStyle,
+  ...rest
 }: TextInputProps): JSX.Element => {
   const { errors, control } = useFormContext();
   return (
     <Controller
       control={control}
       render={({ onChange, value, onBlur }) => (
-        <View style={{ height: 80 }}>
+        <View style={[defaultStyles.inputContainerStyle, inputContainerStyle]}>
           <Item floatingLabel>
             <Input
               onChangeText={(value) => onChange(value)}
               value={value}
               onBlur={onBlur}
-              placeholder={placeholderText}
-              secureTextEntry={secureTextEntry}
-              testID={testID}
+              {...rest}
             />
             {label && <Label> {label}</Label>}
           </Item>
-          <Row style={{ marginLeft: 5 }}>
+          <Row style={[defaultStyles.errorContainerStyle, errorContainerStyle]}>
             {errors[name] && (
-              <Text testID='error' style={{ color: 'red' }}>
+              <Text testID='error' style={defaultStyles.errorColor}>
                 {errors[name].message}
               </Text>
             )}
@@ -54,3 +58,15 @@ export const TextInput = ({
     />
   );
 };
+
+interface Styles {
+  inputContainerStyle: ViewStyle;
+  errorContainerStyle: TextStyle;
+  errorColor: TextStyle;
+}
+
+const defaultStyles = StyleSheet.create<Styles>({
+  inputContainerStyle: { height: 80 },
+  errorContainerStyle: { marginLeft: 5 },
+  errorColor: { color: 'red' },
+});

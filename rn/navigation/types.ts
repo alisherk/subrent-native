@@ -3,9 +3,11 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
+export type Screens = 'Home' | 'Rental' | 'Login' | 'Contact Owner' | 'Checkout';
+
 export type RootStackParamList = {
   Home: undefined;
-  Login: undefined;
+  Login: { origin: Screens };
   Notifications: undefined;
   Category: { category: string };
   Rental: undefined;
@@ -28,6 +30,11 @@ export type LoginScreenProps = StackScreenProps<
 export type ContactOwnerScreenProps = StackScreenProps<
   RootStackParamList,
   'Contact Owner'
+>;
+
+export type StripeScreenProps = StackScreenProps<
+  RootStackParamList,
+  'Stripe'
 >;
 
 export type PostRentalScreenProps = StackScreenProps<
@@ -56,10 +63,7 @@ export type CheckoutScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Checkout'
 >;
-export type StripeScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Stripe'
->;
+
 
 export type ManageRentalScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
