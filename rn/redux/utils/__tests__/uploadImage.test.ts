@@ -1,6 +1,6 @@
 import { uploadImage } from '../uploadImage';
-import { firebase } from '../../../firebase';
-jest.mock('../../../firebase'); 
+import { firebase } from 'gateway';
+jest.mock('gateway'); 
 
 global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
  

@@ -1,6 +1,6 @@
 import * as actions from '../authActions';
 import { returnWithStore } from 'test-utils';
-import { firebase } from '../../../firebase';
+import { firebase } from 'gateway';
 import { AuthActionTypes } from '../types';
 import * as utils from '../../utils';
 jest.mock('../../utils');
@@ -12,12 +12,9 @@ describe('auth actions', () => {
   const spy = jest.spyOn(utils, 'storeUserAuthData');
   const mockdata = { user: { name: 'test', updateProfile: jest.fn() } };
   const mockuser = { email: 'test', password: 'test', username: 'test' };
-  firebase.db.doc = jest.fn().mockReturnValue({ set: jest.fn() });
   firebase.auth.createUserWithEmailAndPassword = jest
     .fn()
     .mockReturnValue(mockdata);
-
-
   it('dispatches expected data with registerUser', async () => {
     await store.dispatch<any>(actions.registerUser(mockuser));
     const expectedData = [
@@ -25,6 +22,7 @@ describe('auth actions', () => {
     ];
     expect(store.getActions()).toEqual(expectedData);
   });
+  
   it('calls async storage', async () => {
     await store.dispatch<any>(actions.registerUser(mockuser));
     expect(spy).toBeCalledTimes(1);

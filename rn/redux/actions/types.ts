@@ -2,7 +2,7 @@ import { Rental } from 'types';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
 import { RootState } from '../reducers';
-import type firebase from 'firebase';
+import { FirebaseUser } from 'gateway/types';
 
 export enum RentalActions {
   POPULATE_RENTAL = 'POPULATE_RENTAL',
@@ -27,12 +27,12 @@ export interface LoginActionFailure {
 
 export interface LoginActionSuccess {
   type: AuthActionTypes.SIGN_IN_SUCCESS;
-  payload: { user: firebase.User };
+  payload: { user: FirebaseUser  };
 }
 
 export interface GetUserAuthAction {
   type: AuthActionTypes.GET_USER_AUTH;
-  payload: { user: firebase.User };
+  payload: { user: FirebaseUser };
 }
 
 export interface ClearUserAuthAction {

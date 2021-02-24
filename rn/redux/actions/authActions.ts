@@ -1,4 +1,5 @@
 import { firebase } from 'gateway';
+import { FirebaseUser } from 'gateway/types';
 import { Dispatch } from 'redux';
 import { getEnvVariables } from 'env';
 import * as Google from 'expo-google-app-auth';
@@ -25,7 +26,7 @@ export const registerUser = (user: NewUser) => async (
       await data.user.updateProfile({ displayName: user.username });
       await firebase.db.doc(`users/${data.user.uid}`).set({
         displayName: user.username,
-        createdAt: firebase.getServerTimestamp(),
+        createdAt: firebase.addServerTimestamp(),
       });
       await firebase.db
         .doc(`users/${data.user.uid}/_private/${data.user.uid}`)
@@ -74,7 +75,7 @@ export const loginUser = (user: User) => async (
 export const getStoredUserAuth = () => async (
   dispatch: Dispatch
 ): Promise<void> => {
-  const authedUser: firebase.User = await getUserAuthData();
+  const authedUser: FirebaseUser = await getUserAuthData();
   if (authedUser) {
     dispatch<GetUserAuthAction>({
       type: AuthActionTypes.GET_USER_AUTH,
@@ -96,37 +97,27 @@ export const loginWithGoogle = () => async (
       iosClientId: iosGoogleAuthClientId,
       scopes: ['profile', 'email'],
     });
-    const credential: firebase.auth.OAuthCredential = firebase.getGoogleAuthCred(
-      result
-    );
-    const userCredential: firebase.auth.UserCredential = await firebase.auth.signInWithCredential(
-      credential
-    );
+    const credential = firebase.getGoogleAuthCred(result);
+    const userCredential = await firebase.auth.signInWithCredential(credential);
     const { user, additionalUserInfo } = userCredential;
     if (user && additionalUserInfo) {
-      const privDocRef: firebase.firestore.DocumentReference = firebase.db.doc(
+      const privDocRef = firebase.db.doc(
         `users/${user.uid}/_private/${user.uid}`
       );
-      const userDocRef: firebase.firestore.DocumentReference = firebase.db.doc(
-        `users/${user.uid}`
-      );
-      await firebase.db.runTransaction(
-        async (transaction: firebase.firestore.Transaction) => {
-          if (additionalUserInfo.isNewUser) {
-            const snap: firebase.firestore.DocumentSnapshot = await transaction.get(
-              privDocRef
-            );
-            transaction.set(userDocRef, {
-              displayName: user.displayName,
-              authType: 'google',
-              createdAt: firebase.getServerTimestamp(),
-            });
-            if (snap.exists)
-              transaction.update(privDocRef, { email: user.email });
-            else transaction.set(privDocRef, { email: user.email });
-          }
+      const userDocRef = firebase.db.doc(`users/${user.uid}`);
+      await firebase.db.runTransaction(async (transaction) => {
+        if (additionalUserInfo.isNewUser) {
+          const snap = await transaction.get(privDocRef);
+          transaction.set(userDocRef, {
+            displayName: user.displayName,
+            authType: 'google',
+            createdAt: firebase.addServerTimestamp(),
+          });
+          if (snap.exists)
+            transaction.update(privDocRef, { email: user.email });
+          else transaction.set(privDocRef, { email: user.email });
         }
-      );
+      });
       await storeUserAuthData(user);
       dispatch<LoginActionSuccess>({
         type: AuthActionTypes.SIGN_IN_SUCCESS,

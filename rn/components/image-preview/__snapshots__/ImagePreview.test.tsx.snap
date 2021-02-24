@@ -37,6 +37,7 @@ exports[`ImagePreview component matches snapshot 1`] = `
           "fontSize": 16,
         }
       }
+      uppercase={false}
     >
        No image picked yet
     </Text>

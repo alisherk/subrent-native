@@ -36,17 +36,13 @@ function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionTypes.INITIAL_LOAD: {
       const rentals = [...state.rentals];
-      if (action.snapshot) {
-        action.snapshot.forEach((doc) => {
-          if (doc.data) {
-            const rental = doc.data() as Omit<Rental, 'id'>;
-            rentals.push({
-              id: doc.id,
-              ...rental,
-            });
-          }
-        });
-      }
+      action.snapshot.forEach((doc) => {
+          const rental = doc.data() as Omit<Rental, 'id'>;
+          rentals.push({
+            id: doc.id,
+            ...rental,
+          });
+      });
 
       const nextLimit = rentals.length + action.limit;
       const end = rentals.length < action.limit || nextLimit === state.limit;
@@ -154,7 +150,11 @@ export const usePaginateQuery = (
       try {
         const snapshot = await query.get();
         if (!isCancelled) {
-          dispatch({ type: ActionTypes.INITIAL_LOAD, snapshot, limit });
+          dispatch({
+            type: ActionTypes.INITIAL_LOAD,
+            snapshot,
+            limit,
+          });
         }
       } catch (err) {
         dispatch({ type: ActionTypes.ERROR, error: err.message });

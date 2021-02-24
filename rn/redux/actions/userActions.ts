@@ -14,7 +14,7 @@ export const contactOwner = (message: string): AppThunk => async (
       author: authedUser.displayName,
       authorUid: authedUser.uid,
       authorImage: authedUser.photoURL,
-      date: firebase.getServerTimestamp(),
+      date: firebase.addServerTimestamp(),
       owners: [authedUser.uid, rental.ownerUid],
       message,
     });

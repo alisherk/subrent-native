@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, StyleSheet, ViewStyle, Platform } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 import { Form } from 'components/form';
 import { LoginFields } from './LoginFields';
 import { SignUpFields } from './SignUpFields';

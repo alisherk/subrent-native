@@ -1,5 +1,5 @@
 import { usePaginateQuery } from '../usePaginateQuery';
-import { renderHook, cleanup } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks';
 
 const doc = { id: 1, name: 'test', forEach: () => doc };
 const query: any = {
@@ -16,4 +16,4 @@ it('calls the hook', async () => {
   expect(result.current.rentals).toBeTruthy()
 });
 
-afterAll(cleanup);
+

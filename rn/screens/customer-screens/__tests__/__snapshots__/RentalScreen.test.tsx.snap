@@ -141,6 +141,7 @@ exports[`renders without crashing 1`] = `
                   },
                 ]
               }
+              uppercase={false}
             >
               test
             </Text>
@@ -175,6 +176,7 @@ exports[`renders without crashing 1`] = `
                   "fontSize": 16,
                 }
               }
+              uppercase={false}
             >
               Full day: $
               10
@@ -187,6 +189,7 @@ exports[`renders without crashing 1`] = `
                   "fontSize": 16,
                 }
               }
+              uppercase={false}
             >
               Half day: $
               5
@@ -195,23 +198,18 @@ exports[`renders without crashing 1`] = `
           <View
             bordered={true}
             style={
-              Array [
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#fff",
-                  "borderBottomWidth": 0.5,
-                  "borderColor": "#ccc",
-                  "borderRadius": 2,
-                  "flexDirection": "row",
-                  "paddingBottom": 10,
-                  "paddingLeft": 15,
-                  "paddingRight": 15,
-                  "paddingTop": 10,
-                },
-                Object {
-                  "height": 50,
-                },
-              ]
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fff",
+                "borderBottomWidth": 0.5,
+                "borderColor": "#ccc",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "paddingBottom": 10,
+                "paddingLeft": 15,
+                "paddingRight": 15,
+                "paddingTop": 10,
+              }
             }
           >
             <Text
@@ -222,8 +220,39 @@ exports[`renders without crashing 1`] = `
                   "fontSize": 16,
                 }
               }
+              uppercase={false}
             >
-              Equipment: 
+              test
+            </Text>
+          </View>
+          <View
+            bordered={true}
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fff",
+                "borderBottomWidth": 0.5,
+                "borderColor": "#ccc",
+                "borderRadius": 2,
+                "flexDirection": "row",
+                "paddingBottom": 10,
+                "paddingLeft": 15,
+                "paddingRight": 15,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "#000",
+                  "fontFamily": "System",
+                  "fontSize": 16,
+                }
+              }
+              uppercase={false}
+            >
+               
               test
                
             </Text>
@@ -258,8 +287,8 @@ exports[`renders without crashing 1`] = `
                   "fontSize": 16,
                 }
               }
+              uppercase={false}
             >
-              Description: 
               test
             </Text>
           </View>
@@ -280,59 +309,59 @@ exports[`renders without crashing 1`] = `
                   "paddingTop": 10,
                 },
                 Object {
-                  "height": 50,
+                  "justifyContent": "space-evenly",
                 },
               ]
             }
           >
-            <Text
+            <View
               style={
                 Object {
-                  "color": "#000",
-                  "fontFamily": "System",
-                  "fontSize": 16,
-                }
-              }
-            >
-              Region: 
-              test
-            </Text>
-          </View>
-          <View
-            bordered={true}
-            style={
-              Array [
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#fff",
-                  "borderBottomWidth": 0.5,
-                  "borderColor": "#ccc",
-                  "borderRadius": 2,
+                  "flex": 1,
                   "flexDirection": "row",
-                  "paddingBottom": 10,
-                  "paddingLeft": 15,
-                  "paddingRight": 15,
-                  "paddingTop": 10,
-                },
-                Object {
-                  "height": 50,
-                },
-              ]
-            }
-          >
-            <Text
-              style={
-                Object {
-                  "color": "#000",
-                  "fontFamily": "System",
-                  "fontSize": 16,
                 }
               }
             >
-              Delivery:
-               
-              No
-            </Text>
+              <Text
+                style={
+                  Object {
+                    "color": "#000",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                  }
+                }
+                uppercase={false}
+              >
+                You don't need to contact the owner to rent it
+              </Text>
+            </View>
+            <RNGestureHandlerButton
+              collapsable={false}
+              onGestureEvent={[Function]}
+              onGestureHandlerEvent={[Function]}
+              onGestureHandlerStateChange={[Function]}
+              onHandlerStateChange={[Function]}
+              rippleColor={0}
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  undefined,
+                ]
+              }
+            >
+              <View
+                accessible={true}
+                style={
+                  Object {
+                    "opacity": 1,
+                  }
+                }
+              >
+                <Text />
+              </View>
+            </RNGestureHandlerButton>
           </View>
           <View
             style={
@@ -404,6 +433,7 @@ exports[`renders without crashing 1`] = `
                     "paddingRight": 16,
                   }
                 }
+                uppercase={false}
               >
                 Rent this equipment 
               </Text>
@@ -428,9 +458,9 @@ exports[`renders without crashing 1`] = `
             onMarkerPress={[Function]}
             region={
               Object {
-                "latitude": 49.8951,
+                "latitude": 1,
                 "latitudeDelta": 0.0922,
-                "longitude": -97.1384,
+                "longitude": 2,
                 "longitudeDelta": 0.0421,
               }
             }
@@ -445,8 +475,8 @@ exports[`renders without crashing 1`] = `
             <AIRMapMarker
               coordinate={
                 Object {
-                  "latitude": 49.8951,
-                  "longitude": -97.1384,
+                  "latitude": 1,
+                  "longitude": 2,
                 }
               }
               onPress={[Function]}

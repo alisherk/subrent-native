@@ -110,7 +110,7 @@ export const PostRentalScreen = ({
             }}
             label='Equipment name'
             defaultValue={doc?.name}
-            testID='input'
+            testID='inputForName'
           />
           <Form.TextInput
             name='full_day_price'

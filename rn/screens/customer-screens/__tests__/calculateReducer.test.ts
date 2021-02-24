@@ -1,18 +1,18 @@
+import { Dispatch, useReducer } from 'react';
+import { mockRental as rental } from 'test-utils';
 import {
   renderHook,
   act,
   cleanup,
   HookResult,
 } from '@testing-library/react-hooks';
-import { Dispatch, useReducer } from 'react';
-import { mockRental as rental } from '../../../test-utils';
 import {
   reducer as calculateReducer,
   State,
   PriceChoices,
   ActionTypes,
   Action,
-} from '..';
+} from '../CheckoutScreen';
 
 describe('calculate reducer', () => {
   afterAll(cleanup);

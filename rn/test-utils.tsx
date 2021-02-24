@@ -30,6 +30,11 @@ export function renderWithRedux(
   export const createTestProps =<T extends {}> (props: T) => ({
     navigation: {
       navigate: jest.fn(),
+      setOptions: jest.fn(), 
+      addListener: jest.fn()
+    },
+    route: {
+      params: {}
     },
     ...props,
   });
@@ -49,6 +54,8 @@ export const mockRental = {
   image: 'test',
   instructions: 'test', 
   confirmation_required: 'test',
+  ownerUid: 'e9e9e9er', 
+  expoToken: 'ajdjdudnfififh',
   g: { geopoint: { U: 1, k: 2 }}
 };
 

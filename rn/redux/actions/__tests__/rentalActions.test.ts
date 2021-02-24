@@ -1,9 +1,9 @@
 import { returnWithStore, mockRental as rental } from 'test-utils';
 import * as actions from '..';
-import { firebase } from '../../../firebase'; 
+import { firebase } from 'gateway'; 
 jest.mock('../../utils');
-jest.mock('../../../components/places-autocomplete');
-jest.mock('../../../firebase');
+jest.mock('components/places-autocomplete');
+
 
 describe('rental actions', () => {
   

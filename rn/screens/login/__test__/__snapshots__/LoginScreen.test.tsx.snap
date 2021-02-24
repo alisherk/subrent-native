@@ -72,6 +72,7 @@ exports[`LoginScreen renders without crashing 1`] = `
               Object {
                 "height": 80,
               },
+              undefined,
             ]
           }
         >
@@ -129,6 +130,7 @@ exports[`LoginScreen renders without crashing 1`] = `
             </View>
             <TextInput
               allowFontScaling={true}
+              autoCapitalize="none"
               editable={true}
               onBlur={[Function]}
               onChangeText={[Function]}
@@ -170,6 +172,7 @@ exports[`LoginScreen renders without crashing 1`] = `
               Object {
                 "height": 80,
               },
+              undefined,
             ]
           }
         >
@@ -267,6 +270,55 @@ exports[`LoginScreen renders without crashing 1`] = `
             Object {
               "flex": 1,
               "flexDirection": "row",
+              "justifyContent": "flex-end",
+              "marginBottom": 15,
+            }
+          }
+        >
+          <RNGestureHandlerButton
+            collapsable={false}
+            onGestureEvent={[Function]}
+            onGestureHandlerEvent={[Function]}
+            onGestureHandlerStateChange={[Function]}
+            onHandlerStateChange={[Function]}
+            rippleColor={0}
+            style={
+              Array [
+                Object {
+                  "overflow": "hidden",
+                },
+                undefined,
+              ]
+            }
+          >
+            <View
+              accessible={true}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#000",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                  }
+                }
+                uppercase={false}
+              >
+                 Forgot password?
+              </Text>
+            </View>
+          </RNGestureHandlerButton>
+        </View>
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "flexDirection": "row",
               "justifyContent": "space-evenly",
             }
           }
@@ -333,6 +385,7 @@ exports[`LoginScreen renders without crashing 1`] = `
                     "paddingRight": 16,
                   }
                 }
+                uppercase={false}
               >
                 Submit
               </Text>
@@ -400,75 +453,9 @@ exports[`LoginScreen renders without crashing 1`] = `
                     "paddingRight": 16,
                   }
                 }
+                uppercase={false}
               >
                 Sign up
-              </Text>
-            </View>
-          </View>
-          <View
-            style={
-              Array [
-                Object {},
-                Object {
-                  "alignItems": "center",
-                },
-              ]
-            }
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              forwardedRef={[Function]}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "alignItems": "center",
-                  "alignSelf": "flex-start",
-                  "backgroundColor": "#007aff",
-                  "borderBottomWidth": null,
-                  "borderColor": "#007aff",
-                  "borderLeftWidth": null,
-                  "borderRadius": 5,
-                  "borderRightWidth": null,
-                  "borderTopWidth": null,
-                  "borderWidth": undefined,
-                  "elevation": 2,
-                  "flexDirection": "row",
-                  "height": 45,
-                  "justifyContent": "space-between",
-                  "marginVertical": 5,
-                  "opacity": 1,
-                  "padding": 10,
-                  "paddingBottom": 6,
-                  "paddingTop": 6,
-                  "shadowColor": undefined,
-                  "shadowOffset": undefined,
-                  "shadowOpacity": undefined,
-                  "shadowRadius": undefined,
-                }
-              }
-            >
-              <Text
-                style={
-                  Object {
-                    "backgroundColor": "transparent",
-                    "color": "#fff",
-                    "fontFamily": "System",
-                    "fontSize": 16.5,
-                    "marginLeft": 0,
-                    "marginRight": 0,
-                    "paddingLeft": 16,
-                    "paddingRight": 16,
-                  }
-                }
-              >
-                Reset
               </Text>
             </View>
           </View>
@@ -577,6 +564,7 @@ exports[`LoginScreen renders without crashing 1`] = `
                     "paddingRight": 16,
                   }
                 }
+                uppercase={false}
               >
                 Login with Google
               </Text>

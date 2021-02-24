@@ -1,17 +1,12 @@
 import React from 'react';
 import { renderWithRedux, createTestProps } from 'test-utils';
 import { fireEvent } from '@testing-library/react-native';
-import { ManageRentalScreen } from '..';
-import { firebase } from '../../../firebase';
+import { ManageRentalScreen } from '../ManageRentalScreen';
 import * as hooks from 'hooks/usePaginateQuery';
 
 describe('ManageRentalScreen', () => {
-  const navigation = { addListener: jest.fn() };
-  const props: any = createTestProps({ navigation });
-  firebase.db.collection = jest.fn().mockReturnValue({
-    where: jest.fn().mockReturnValue({ orderBy: jest.fn() }),
-  });
 
+  const props: any = createTestProps({});
   it('renders empty message', async () => {
     jest.spyOn(hooks, 'usePaginateQuery').mockReturnValue({} as any);
     const screen = renderWithRedux(<ManageRentalScreen {...props} />);

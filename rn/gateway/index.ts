@@ -1,4 +1,4 @@
-import * as app from 'firebase/app';
+import app from 'firebase/app';
 import * as geofirestore from 'geofirestore';
 import 'firebase/firestore';
 import 'firebase/auth';
@@ -23,11 +23,10 @@ class Firebase {
     this.auth = app.auth();
     this.functions = app.functions();
     this.storage = app.storage();
-    //@ts-ignore
     this.geofirestore = geofirestore.initializeApp(this.db);
   }
 
-  public getServerTimestamp(): app.firestore.FieldValue {
+  public addServerTimestamp(): app.firestore.FieldValue {
     return app.firestore.FieldValue.serverTimestamp();
   }
 

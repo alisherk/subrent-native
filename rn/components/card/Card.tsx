@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { Touchable } from '../touchable';
+import { TouchableOpacity } from 'react-native';
 import { Text, Card, CardItem, Button, Content, View } from 'native-base';
 
 interface CardProps {
@@ -29,7 +29,7 @@ export const CardComponent = ({
   return (
     <Content padder>
       <Card>
-        <Touchable onPress={() => onSelect(category)}>
+        <TouchableOpacity onPress={() => onSelect(category)}>
           <CardItem bordered style={{ justifyContent: 'center' }}>
             <Text> {name} </Text>
           </CardItem>
@@ -48,7 +48,7 @@ export const CardComponent = ({
               <Text>{btnName}</Text>
             </Button>
           </View>
-        </Touchable>
+        </TouchableOpacity>
       </Card>
     </Content>
   );

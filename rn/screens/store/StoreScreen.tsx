@@ -1,15 +1,12 @@
 import React from 'react';
 import { Card, H3 } from 'native-base';
-import { FlatList } from 'react-native';
-import { Touchable } from '../../components/touchable';
-import { StoreScreenProps } from '../../navigation';
-
-type Screen = 'My Rentals' | 'Post Rental';
+import { FlatList, TouchableOpacity } from 'react-native';
+import { StoreScreenProps, Screens } from 'navigation';
 
 type CardItem = {
   id: number;
   title: string;
-  screen: Screen;
+  screen: Screens;
 };
 
 const menu: CardItem[] = [
@@ -18,10 +15,11 @@ const menu: CardItem[] = [
 ];
 
 export const StoreScreen = ({ navigation }: StoreScreenProps): JSX.Element => {
-  const handleSelect = (screen: Screen): void => navigation.navigate(screen);
+  
+ const handleSelect = (screen: Screens): void => navigation.navigate(screen);
 
   const renderItem = ({ item }: { item: CardItem }) => (
-    <Touchable onPress={() => handleSelect(item.screen)}>
+    <TouchableOpacity onPress={() => handleSelect(item.screen)}>
       <Card
         style={{
           width: 180,
@@ -32,7 +30,7 @@ export const StoreScreen = ({ navigation }: StoreScreenProps): JSX.Element => {
       >
         <H3> {item.title} </H3>
       </Card>
-    </Touchable>
+    </TouchableOpacity>
   );
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Icon } from 'native-base';
-import { Touchable } from '../touchable';
+import { TouchableOpacity } from 'react-native';
 import {
   Image,
   StyleSheet,
@@ -31,7 +31,7 @@ export const ImagePreview = ({
         ) : (
           <View style={defaultStyles.image}>
             {deleteIcon && (
-              <Touchable
+              <TouchableOpacity
                 onPress={handleOnPress}
                 style={defaultStyles.touchable}
                 testID='touchable'
@@ -40,7 +40,7 @@ export const ImagePreview = ({
                   style={defaultStyles.deleteIcon}
                   name='trash'
                 />
-              </Touchable>
+              </TouchableOpacity>
             )}
             <Image
               testID='image'

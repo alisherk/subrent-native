@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FlatList } from 'react-native';
-import { ManageRentalScreenNavigationProp } from 'navigation';
+import { ManageRentalScreenProps } from 'navigation';
 import { usePaginateQuery } from 'hooks';
 import { firebase } from 'gateway';
 import { Card } from 'components/card';
@@ -16,12 +16,7 @@ const EmptyMessageContainer = (): JSX.Element => (
   </Row>
 );
 
-interface ManageRentalProps {
-  navigation: ManageRentalScreenNavigationProp;
-  route: ManageRentalScreenNavigationProp;
-}
-
-export const ManageRentalScreen = ({ navigation }: ManageRentalProps) => {
+export const ManageRentalScreen = ({ navigation }: ManageRentalScreenProps) => {
   const authUser = useSelector((state: RootState) => state.auth.authedUser);
   const {
     rentals,
@@ -65,6 +60,7 @@ export const ManageRentalScreen = ({ navigation }: ManageRentalProps) => {
       renderItem={renderItem}
       onEndReachedThreshold={0.2}
       onEndReached={handleLoadMore}
+      keyExtractor={item => item.id.toString()}
       initialNumToRender={2}
       ListEmptyComponent={EmptyMessageContainer}
     />

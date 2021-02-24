@@ -1,7 +1,8 @@
 import { AuthAction, AuthActionTypes } from '../actions';
+import { FirebaseUser } from 'gateway/types';
 
 type AuthState = {
-  authedUser: firebase.User | null;
+  authedUser: FirebaseUser | null;
   error: string | null | Error;
 };
 
