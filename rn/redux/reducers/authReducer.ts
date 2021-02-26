@@ -1,12 +1,12 @@
 import { AuthAction, AuthActionTypes } from '../actions';
 import { FirebaseUser } from 'gateway/types';
 
-type AuthState = {
+type AuthReducerState = {
   authedUser: FirebaseUser | null;
   error: string | null | Error;
 };
 
-const initialState: AuthState = {
+const initialState: AuthReducerState = {
   authedUser: null,
   error: null,
 };
@@ -14,7 +14,7 @@ const initialState: AuthState = {
 export const authReducer = (
   state = initialState,
   action: AuthAction
-): AuthState => {
+): AuthReducerState => {
   switch (action.type) {
     case AuthActionTypes.SIGN_IN_SUCCESS:
       return {

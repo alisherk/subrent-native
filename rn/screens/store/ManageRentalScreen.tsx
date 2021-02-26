@@ -5,7 +5,7 @@ import { usePaginateQuery } from 'hooks';
 import { firebase } from 'gateway';
 import { Card } from 'components/card';
 import { Spinner } from 'components/spinner';
-import { Rental } from 'types';
+import { Rental } from 'common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
 import { Row, Text } from 'native-base';

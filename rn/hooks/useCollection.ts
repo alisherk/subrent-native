@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { firestore } from 'firebase';
-import { Rental } from 'types';
+import { Rental } from 'common';
 
 type Data = Rental[];
 type CollectionHook = [Data, boolean, Error | null];

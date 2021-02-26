@@ -1,51 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form } from 'components/form';
+import { MessageList } from 'components/message-list/MessageList';
 import { ContactOwnerScreenProps } from 'navigation';
-import { getEnvVariables } from 'env';
 import { useSelector, useDispatch } from 'react-redux';
-import { contactOwner } from 'redux/actions';
+import { contactOwner, getMessages, flushMessageReducer } from 'redux/actions';
 import { RootState } from 'redux/reducers';
-import {
-  Content,
-  Row,
-  List,
-  ListItem,
-  Thumbnail,
-  Text,
-  Left,
-  Body,
-} from 'native-base';
+import { Content, Row, Text } from 'native-base';
 
 type FormValues = {
   message: string;
 };
 
-export const ContactOwnerScreen = ({
-  navigation,
-}: ContactOwnerScreenProps): JSX.Element => {
+export const ContactOwnerScreen = ({}: ContactOwnerScreenProps): JSX.Element => {
   const dispatch = useDispatch();
-  const rental = useSelector(
-    (state: RootState) => state.rentals.fetchedRental!
-  );
+  const rental = useSelector((state: RootState) => state.rentals.fetchedRental);
+  const messages = useSelector((state: RootState) => state.messages.messages);
+  const msgError = useSelector((state: RootState) => state.messages.error);
+
+  useEffect(() => {
+    dispatch(getMessages());
+    return () => {
+      dispatch(flushMessageReducer());
+    };
+  }, []);
 
   const handleSubmit = async ({ message }: FormValues) => {
-    await dispatch(contactOwner(message));
-
-    if (rental?.expoToken) {
-      fetch('https://exp.host/--/api/v2/push/send', {
-        method: 'POST',
-        headers: {
-          host: 'exp.host',
-          accept: 'application/json',
-          'accept-encoding': 'gzip, deflate',
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: rental.expoToken,
-          title: 'Message from customer',
-          body: message,
-        }),
-      });
+    try {
+      await dispatch(contactOwner(message));
+      if (rental?.expoToken) {
+        fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: {
+            host: 'exp.host',
+            accept: 'application/json',
+            'accept-encoding': 'gzip, deflate',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: rental.expoToken,
+            title: 'Message from customer',
+            body: message,
+          }),
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -62,22 +61,13 @@ export const ContactOwnerScreen = ({
               disabled={formState.isSubmitting || !formState.isValid}
             />
           </Row>
-          <List>
-            <ListItem thumbnail>
-              <Left>
-                <Thumbnail
-                  square
-                  source={{ uri: getEnvVariables().emptyAvatar }}
-                />
-              </Left>
-              <Body>
-                <Text>Sankhadeep</Text>
-                <Text note numberOfLines={1}>
-                  Its time to build a difference . .
-                </Text>
-              </Body>
-            </ListItem>
-          </List>
+          {msgError ? (
+            <Row style={{ justifyContent: 'center', marginTop: 15 }}>
+              <Text>{msgError}</Text>
+            </Row>
+          ) : (
+            <MessageList messages={messages} />
+          )}
         </Content>
       )}
     </Form>

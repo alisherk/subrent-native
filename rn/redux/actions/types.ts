@@ -1,11 +1,46 @@
-import { Rental } from 'types';
+import { Rental, Message } from 'common';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
 import { RootState } from '../reducers';
 import { FirebaseUser } from 'gateway/types';
 
-export enum RentalActions {
+export type ActionError = Error | null | string;
+
+export enum MessageActionTypes {
+  GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS',
+  DISPATCH_MESSAGE_SUCCESS = 'DISPATCH_MESSAGE_SUCCESS',
+  FLUSH_MESSAGES = 'FLUSH_MESSAGES',
+  MESSAGE_ERROR = 'MESSAGE_ERROR',
+}
+
+export interface DispatchMessageSuccess {
+    type: MessageActionTypes.DISPATCH_MESSAGE_SUCCESS, 
+    payload: { message: Message }
+}
+
+export interface GetMessagesSuccess {
+  type: MessageActionTypes.GET_MESSAGES_SUCCESS;
+  payload: { messages: Message[] };
+}
+
+export interface FlushMessageAction {
+  type: MessageActionTypes.FLUSH_MESSAGES
+}
+
+export interface MessageError {
+  type: MessageActionTypes.MESSAGE_ERROR;
+  payload: { error: ActionError };
+}
+
+export type MessageAction = GetMessagesSuccess | DispatchMessageSuccess | FlushMessageAction | MessageError;
+
+export enum RentalActionTypes {
   POPULATE_RENTAL = 'POPULATE_RENTAL',
+}
+
+export interface PopulateRentalAction {
+  type: RentalActionTypes.POPULATE_RENTAL;
+  payload: { rental: Rental };
 }
 
 export enum AuthActionTypes {
@@ -15,19 +50,14 @@ export enum AuthActionTypes {
   CLEAR_USER_AUTH = 'CLEAR_USER_AUTH',
 }
 
-export interface PopulateRentalAction {
-  type: RentalActions.POPULATE_RENTAL;
-  payload: { rental: Rental };
-}
-
 export interface LoginActionFailure {
   type: AuthActionTypes.SIGN_IN_FAILURE;
-  payload: { error: Error | string | null };
+  payload: { error: ActionError };
 }
 
 export interface LoginActionSuccess {
   type: AuthActionTypes.SIGN_IN_SUCCESS;
-  payload: { user: FirebaseUser  };
+  payload: { user: FirebaseUser };
 }
 
 export interface GetUserAuthAction {
@@ -44,7 +74,6 @@ export type AuthAction =
   | LoginActionFailure
   | GetUserAuthAction
   | ClearUserAuthAction;
-
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

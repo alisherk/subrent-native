@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import { firebase } from 'gateway';
 import { usePaginateQuery } from 'hooks';
 import { populateRental } from 'redux/actions';
-import { Rental } from 'types';
+import { Rental } from 'common';
 import { CategoryScreenProps } from 'navigation';
 import { Card } from 'components/card';
 import { RootState } from 'redux/reducers';

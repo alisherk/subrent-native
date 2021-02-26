@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useRef } from 'react';
-import { Rental } from 'types';
+import { Rental } from 'common';
 import type firebase from 'firebase';
 
 enum ActionTypes {

@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useRef } from 'react';
-import { Rental } from 'types';
+import { Rental } from 'common';
 
 enum ActionTypes {
   INITIAL_LOAD = 'INITIAL_LOAD',

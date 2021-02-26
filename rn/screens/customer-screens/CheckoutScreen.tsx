@@ -5,7 +5,7 @@ import { createStripeSession } from 'gateway/functions';
 import { calculate, calculationResult } from './utils';
 import { Spinner } from 'components/spinner';
 import { RadioInput, RadioOption } from 'components/form';
-import { Rental } from 'types';
+import { Rental } from 'common';
 import { RootState } from 'redux/reducers';
 import { CheckoutScreenNavigationProp } from 'navigation';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -143,7 +143,7 @@ export const CheckoutScreen = ({
     dispatch({ type: ActionTypes.CALCULATE, rental });
   }, [fromDate, toDate]);
 
-  const handleChangePrice = (): void => {
+  const handlePriceChange = (): void => {
     dispatch({ type: ActionTypes.ON_PRICE_CHANGE, rental });
   };
 
@@ -199,7 +199,7 @@ export const CheckoutScreen = ({
           <CardItem header>
             <RadioInput
               value={price_choice}
-              handlePress={handleChangePrice}
+              handlePress={handlePriceChange}
               options={PriceOptions}
             />
           </CardItem>

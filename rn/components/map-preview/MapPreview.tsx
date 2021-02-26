@@ -3,7 +3,7 @@ import { StyleSheet, ViewStyle, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 interface MapPreviewProps {
-  location: { geopoint: { U: number; k: number } };
+  location?: { geopoint: { U: number; k: number } } ;
 }
 
 export const MapPreview =  ({ location } : MapPreviewProps ) => {
