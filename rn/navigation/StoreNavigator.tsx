@@ -33,6 +33,20 @@ export const StoreNavigator = (): JSX.Element => {
           header: (props: StackHeaderProps) => <MainHeader {...props} />,
         }}
       />
+      <Stack.Screen
+        name='Messages'
+        component={StoreScreens.MessageScreen}
+        options={{
+          header: (props: StackHeaderProps) => <MainHeader {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name='Messenger'
+        component={StoreScreens.MessengerScreen}
+        options={{
+          header: (props: StackHeaderProps) => <MainHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

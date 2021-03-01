@@ -5,8 +5,8 @@ import { TabsNavigator } from './TabsNavigator';
 import { LoginNavigator } from './LoginNavigator';
 import { Icon, Button, Text, Toast } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/reducers';
-import { signOut } from '../redux/actions';
+import { RootState } from 'redux/reducers';
+import { signOut } from 'redux/actions';
 import {
   createDrawerNavigator,
   DrawerItemList,
@@ -60,11 +60,11 @@ export const DrawerNavigator = (): JSX.Element => {
       {authedUser ? (
         <>
           <Drawer.Screen
-            name='Home'
+            name='Shop'
             component={TabsNavigator}
             options={{
               drawerIcon: ({ color }: Color) => (
-                <Icon name='home' style={{ color }} />
+                <Icon name='cart' style={{ color }} />
               ),
             }}
           />
@@ -73,7 +73,7 @@ export const DrawerNavigator = (): JSX.Element => {
             component={StoreNavigator}
             options={{
               drawerIcon: ({ color }: Color) => (
-                <Icon name='cart' style={{ color }} />
+                <Icon name='home' style={{ color }} />
               ),
             }}
           />
@@ -81,11 +81,11 @@ export const DrawerNavigator = (): JSX.Element => {
       ) : (
         <>
           <Drawer.Screen
-            name='Home'
+            name='Shop'
             component={TabsNavigator}
             options={{
               drawerIcon: ({ color }: Color) => (
-                <Icon name='home' style={{ color }} />
+                <Icon name='cart' style={{ color }} />
               ),
             }}
           />

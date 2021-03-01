@@ -3,24 +3,30 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
-export type Screens = 'Home' | 'Rental' | 'Login' | 'Contact Owner' | 'Checkout' | 'My Rentals' | 'Post Rental';
+export type Screens = 'Shop' | 'Rental' | 'Login' | 'Contact Owner' | 'Checkout' | 'My Rentals' | 'Post Rental' | 'Messages' ;
 
 export type RootStackParamList = {
-  Home: undefined;
+  Shop: undefined;
   Login: { origin: Screens };
   Notifications: undefined;
   Category: { category: string };
   Rental: undefined;
+  'Contact Owner': { rentalId: string};
   Checkout: undefined;
   Stripe: { sessionId: string };
   'My Store': undefined | { screen: string };
   'My Rentals': undefined;
-  'My Messages': undefined;
-  'Contact Owner': undefined;
+  'Messages': undefined;
+  'Messenger': { rentalId: string; messageOwnerUid: string};
   'Post Rental': { rentalId: string };
 };
 
 export type StoreScreenProps = StackScreenProps<RootStackParamList, 'My Store'>;
+
+export type HomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Shop'
+>;
 
 export type LoginScreenProps = StackScreenProps<
   RootStackParamList,
@@ -53,12 +59,11 @@ export type ManageRentalScreenProps = StackScreenProps<
   RootStackParamList,
   'My Rentals'
 >;
-
-
-export type HomeScreenNavigationProp = StackNavigationProp<
+export type MessageScreenProps = StackScreenProps<
   RootStackParamList,
-  'Home'
+  'Messages'
 >;
+
 export type NotificationsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Notifications'
@@ -69,9 +74,8 @@ export type CheckoutScreenNavigationProp = StackNavigationProp<
   'Checkout'
 >;
 
-
 export type AppNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<RootStackParamList, 'Home'>,
+  StackNavigationProp<RootStackParamList>,
   CompositeNavigationProp<
     DrawerNavigationProp<RootStackParamList>,
     BottomTabNavigationProp<RootStackParamList>

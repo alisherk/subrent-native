@@ -1,37 +1,51 @@
-import React from 'react';
-import {
-  Content,
-  List,
-  ListItem,
-  Thumbnail,
-  Text,
-  Left,
-  Body,
-  Right,
-  Button,
-} from 'native-base';
+import React, { useEffect } from 'react';
+import { Content, Text, Row } from 'native-base';
+import { MessageList } from 'components/message-list';
+import { useSelector, useDispatch } from 'react-redux';
+import { getMessages, flushMessageReducer, MessageTypes } from 'redux/actions';
+import { RootState } from 'redux/reducers';
+import { StyleSheet } from 'react-native';
+import { firebase } from 'gateway';
+import { Message } from 'common';
+import { MessageScreenProps } from 'navigation';
 
-export const MessageScreen = (): JSX.Element => {
+export const MessageScreen = ({ navigation }: MessageScreenProps): JSX.Element => {
+  const dispatch = useDispatch();
+  const messages = useSelector((state: RootState) => state.messages.messages);
+  const error = useSelector((state: RootState) => state.messages.error);
+  const authedUser = useSelector((state: RootState) => state.auth.authedUser);
+
+  const query = firebase.db
+    .collection('messages')
+    .where('participants', 'array-contains', authedUser?.uid)
+    .where('author', '!=', authedUser?.displayName)
+
+  useEffect(() => {
+    dispatch(getMessages(query, MessageTypes.MESSAGES));
+    return () => {
+      dispatch(flushMessageReducer());
+    };
+  }, []);
+
+  const handleSelect = (message: Message): void => {
+    navigation.navigate('Messenger', {
+      rentalId: message.rentalId,
+      messageOwnerUid: message.authorUid,
+    });
+  };
+
   return (
     <Content>
-      <List>
-        <ListItem thumbnail>
-          <Left>
-            <Thumbnail square source={{ uri: 'Image URL' }} />
-          </Left>
-          <Body>
-            <Text>Sankhadeep</Text>
-            <Text note numberOfLines={1}>
-              Its time to build a difference . .
-            </Text>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Text>View</Text>
-            </Button>
-          </Right>
-        </ListItem>
-      </List>
+      {error ? (
+        <Row style={styles.row}>
+          <Text>{error}</Text>
+        </Row>
+      ) : (
+        <MessageList messages={messages} touchable={true} onSelect={handleSelect} />
+      )}
     </Content>
   );
 };
+const styles = StyleSheet.create({
+  row: { justifyContent: 'center', marginTop: 15 },
+});

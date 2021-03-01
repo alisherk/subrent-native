@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
-import { rootReducer } from './redux/reducers';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { store } from './redux/store';
 import { RootNavigator } from './navigation/RootNavigator';
 import { AppLoading } from 'expo';
 import { fixFirebaseTimer } from './timerFix';
 import { Root } from 'native-base';
 import * as Font from 'expo-font';
-import thunk from 'redux-thunk';
 import * as Notifications from 'expo-notifications';
 
 fixFirebaseTimer();
-
-let composedEnhancer: any;
-if (process.env.NODE_ENV !== 'production') {
-  composedEnhancer = composeWithDevTools(applyMiddleware(thunk));
-} else {
-  composedEnhancer = applyMiddleware(thunk);
-}
-
-const store = createStore(rootReducer, composedEnhancer);
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -48,7 +36,6 @@ export default function App() {
       />
     );
   }
-
   return (
     <Provider store={store}>
       <SafeAreaView style={{ flex: 1 }}>

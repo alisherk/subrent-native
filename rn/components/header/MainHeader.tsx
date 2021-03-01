@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducers';
-import { StyleSheet, ViewStyle, Platform } from 'react-native';
+import { RootState } from 'redux/reducers';
+import { StyleSheet, ViewStyle, Platform, } from 'react-native';
 import {
   Header,
   Left,
@@ -18,11 +18,6 @@ import {
   View,
 } from 'native-base';
 
-const SCREENS: Record<string, string> = {
-  Home: 'Home',
-  Checkout: 'Checkout',
-  'My Store': 'My Store',
-};
 
 export const MainHeader = ({
   scene,
@@ -30,6 +25,7 @@ export const MainHeader = ({
   navigation,
 }: StackHeaderProps) => {
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
+  const userImageRef = useRef(authedUser?.photoURL);
 
   const title = //@ts-ignore
   (scene.route.params?.category || scene.route.name).replace(
@@ -37,14 +33,13 @@ export const MainHeader = ({
     (fl: string) => fl.toUpperCase()
   );
 
-  const imageUrl = authedUser?.photoURL && authedUser.photoURL;
 
   const renderThumbnail = () => {
-    if (authedUser && title === SCREENS[title]) {
+    if (authedUser) {
       return (
         <View style={defaultStyles.thumbContainer}>
-          {imageUrl ? (
-            <Thumbnail small source={{ uri: imageUrl }} />
+          {userImageRef.current ? (
+            <Thumbnail small source={{ uri: userImageRef.current, cache: 'only-if-cached' }} />
           ) : (
             <Icon name='person' style={defaultStyles.iconStyle} />
           )}

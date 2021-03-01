@@ -1,8 +1,8 @@
-import { RentalActionTypes, PopulateRentalAction } from '../actions';
+import { RentalActionTypes, PopulateActions } from '../actions';
 import { Rental } from 'common';
 
 type RentalReducerState = {
-  fetchedRental: null | Rental;
+  fetchedRental: Rental | null;
 };
 
 const initialState: RentalReducerState = {
@@ -11,13 +11,18 @@ const initialState: RentalReducerState = {
 
 export const rentalReducer = (
   state = initialState,
-  action: PopulateRentalAction
+  action: PopulateActions
 ): RentalReducerState => {
   switch (action.type) {
     case RentalActionTypes.POPULATE_RENTAL:
       return {
         ...state,
         fetchedRental: action.payload.rental,
+      };
+    case RentalActionTypes.FLUSH_RENTAL:
+      return {
+        ...state,
+        fetchedRental: null,
       };
     default:
       return state;

@@ -3,23 +3,34 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
 import { RootState } from '../reducers';
 import { FirebaseUser } from 'gateway/types';
+import { populateRental } from './rentalActions';
 
 export type ActionError = Error | null | string;
 
 export enum MessageActionTypes {
-  GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS',
+  DISPATCH_RENTAL_MESSAGES = 'DISPATCH_RENTAL_MESSAGES',
+  DISPATCH_MESSAGES = 'DISPATCH_MESSAGES',
   DISPATCH_MESSAGE_SUCCESS = 'DISPATCH_MESSAGE_SUCCESS',
   FLUSH_MESSAGES = 'FLUSH_MESSAGES',
   MESSAGE_ERROR = 'MESSAGE_ERROR',
 }
 
+export enum MessageTypes {
+    RENTAL_MESSAGES = 'RENTAL_MESSAGES',
+    MESSAGES = 'MESSAGES',
+  }
+
 export interface DispatchMessageSuccess {
     type: MessageActionTypes.DISPATCH_MESSAGE_SUCCESS, 
-    payload: { message: Message }
+    payload: { message: Message, messageType: MessageTypes  }
 }
 
+export interface GetRentalMessagesSuccess {
+  type: MessageActionTypes.DISPATCH_RENTAL_MESSAGES;
+  payload: { messages: Message[] };
+}
 export interface GetMessagesSuccess {
-  type: MessageActionTypes.GET_MESSAGES_SUCCESS;
+  type: MessageActionTypes.DISPATCH_MESSAGES;
   payload: { messages: Message[] };
 }
 
@@ -32,16 +43,22 @@ export interface MessageError {
   payload: { error: ActionError };
 }
 
-export type MessageAction = GetMessagesSuccess | DispatchMessageSuccess | FlushMessageAction | MessageError;
+export type MessageAction = GetRentalMessagesSuccess | GetMessagesSuccess | DispatchMessageSuccess | FlushMessageAction | MessageError;
 
 export enum RentalActionTypes {
   POPULATE_RENTAL = 'POPULATE_RENTAL',
+  FLUSH_RENTAL = 'FLUSH_RENTAL',
 }
 
 export interface PopulateRentalAction {
   type: RentalActionTypes.POPULATE_RENTAL;
   payload: { rental: Rental };
 }
+export interface FlushRentalAction {
+  type: RentalActionTypes.FLUSH_RENTAL;
+}
+
+export type PopulateActions = PopulateRentalAction | FlushRentalAction;
 
 export enum AuthActionTypes {
   SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS',
@@ -84,11 +101,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export type AppThunkDispatch = ThunkDispatch<RootState, void, Action>;
 
-/* type MyRootState = {};
-type MyExtraArg = undefined;
-type MyThunkResult<R> = ThunkAction<R, MyRootState, MyExtraArg, Action>;
-// It is important to use Action as last type argument, does not work with any.
-type MyThunkDispatch = ThunkDispatch<MyRootState, MyExtraArg, Action>;
-const anotherThunkAction = (): MyThunkResult<Promise<boolean>> => (dispatch, getState) => {
-  return Promise.resolve(true);
-}; */
+

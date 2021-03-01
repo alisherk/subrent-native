@@ -1,30 +1,42 @@
 import { firebase } from 'gateway';
-import { QuerySnapshot } from 'gateway/types';
+import { QuerySnapshot, FirestoreQuery } from 'gateway/types';
 import { Message } from 'common';
+import { store } from '../store';
 import cuid from 'cuid';
 import {
   AppThunk,
   GetMessagesSuccess,
+  GetRentalMessagesSuccess,
   DispatchMessageSuccess,
   MessageError,
   MessageActionTypes,
-  FlushMessageAction
+  FlushMessageAction,
+  MessageTypes,
 } from './types';
 
-export const flushMessageReducer = (): FlushMessageAction =>({ 
-  type: MessageActionTypes.FLUSH_MESSAGES
-})
+const dispatchMessageByType = (
+  type: MessageTypes,
+  messages: Message[]
+) => {
+  if (type === MessageTypes.RENTAL_MESSAGES) {
+    store.dispatch<GetRentalMessagesSuccess>({
+      type: MessageActionTypes.DISPATCH_RENTAL_MESSAGES,
+      payload: { messages },
+    });
+    return;
+  }
+  store.dispatch<GetMessagesSuccess>({
+    type: MessageActionTypes.DISPATCH_MESSAGES,
+    payload: { messages },
+  });
+};
 
-export const getMessages = (): AppThunk => async (dispatch, getState) => {
-  const authedUser = getState().auth.authedUser;
-  const rental = getState().rentals.fetchedRental;
-  if (!authedUser || !rental) return;
-  const messageColRef = firebase.db
-    .collection('messages')
-    .where('rentalId', '==', rental.id)
-    .where('owners', 'array-contains', authedUser.uid)
+export const getMessages = (
+  query: FirestoreQuery,
+  messageType: MessageTypes
+): AppThunk => async (dispatch, getState) => {
   try {
-    const messageSnapshot = (await messageColRef.get()) as QuerySnapshot<Message>;
+    const messageSnapshot = (await query.get()) as QuerySnapshot<Message>;
     if (messageSnapshot.empty) {
       dispatch<MessageError>({
         type: MessageActionTypes.MESSAGE_ERROR,
@@ -36,51 +48,67 @@ export const getMessages = (): AppThunk => async (dispatch, getState) => {
     messageSnapshot.forEach((message) => {
       messages.push({ id: message.id, ...message.data() });
     });
-    dispatch<GetMessagesSuccess>({
-      type: MessageActionTypes.GET_MESSAGES_SUCCESS,
-      payload: { messages },
-    });
+    dispatchMessageByType(messageType, messages);
   } catch (error) {
     console.log(error);
     dispatch<MessageError>({
       type: MessageActionTypes.MESSAGE_ERROR,
-      payload: { error: error.message },
+      payload: { error: 'Oops. We encountered internal server error.' },
     });
   }
 };
 
-export const contactOwner = (text: string): AppThunk => async (
-  dispatch,
-  getState
-) => {
-  const authedUser = getState().auth.authedUser;
-  const rental = getState().rentals.fetchedRental;
-  if (!authedUser || !rental) return;
-  const messageColRef = firebase.db.collection('messages');
+interface ContactOwnerArgs {
+  text: string;
+  rentalId: string | undefined;
+  secondaryPartId: string | undefined;
+  messageType: MessageTypes;
+}
 
+export const contactOwner = ({
+  text,
+  rentalId,
+  secondaryPartId,
+  messageType,
+}: ContactOwnerArgs): AppThunk => async (dispatch, getState) => {
+  const authedUser = getState().auth.authedUser;
+  if (!authedUser || !rentalId || !secondaryPartId) {
+    dispatch<MessageError>({
+      type: MessageActionTypes.MESSAGE_ERROR,
+      payload: {
+        error: 'Oops. You are not authorized to access this resource.',
+      },
+    });
+    return;
+  }
+  const messageColRef = firebase.db.collection('messages');
   try {
     const message: Message = {
       author: authedUser.displayName!,
       authorUid: authedUser.uid,
       authorImage: authedUser.photoURL,
-      rentalId: rental.id,
+      rentalId: rentalId,
       date: firebase.addServerTimestamp(),
       text: text,
     };
     await messageColRef.add({
       ...message,
-      owners: [authedUser.uid, rental.ownerUid],
+      participants: [authedUser.uid, secondaryPartId],
     });
     const storeMessage = Object.assign({}, message, { id: cuid() });
     dispatch<DispatchMessageSuccess>({
       type: MessageActionTypes.DISPATCH_MESSAGE_SUCCESS,
-      payload: { message: storeMessage },
+      payload: { message: storeMessage, messageType },
     });
   } catch (error) {
     console.log(error);
     dispatch<MessageError>({
       type: MessageActionTypes.MESSAGE_ERROR,
-      payload: { error: error.message },
+      payload: { error: 'Oops. We encountered internal server error.' },
     });
   }
 };
+
+export const flushMessageReducer = (): FlushMessageAction => ({
+  type: MessageActionTypes.FLUSH_MESSAGES,
+});

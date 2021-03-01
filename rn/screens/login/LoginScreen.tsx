@@ -43,7 +43,7 @@ export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
   const dispatch = useDispatch();
   const [screen, setScreen] = useState(Screens.LOGIN);
 
-  const originRoute = route.params?.origin || 'Home';
+  const originRoute = route.params?.origin || 'Shop';
 
   const handleSwitchScreen = (passedScreen?: Screens): void => {
     //navigate to desired screen passed as an argument

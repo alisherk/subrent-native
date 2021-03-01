@@ -1,6 +1,6 @@
 import React from 'react';
 import { MainHeader, SimpleHeader } from 'components/header';
-import * as CustomerScreens from 'screens/customer-screens';
+import * as CustomerScreens from 'screens/customer';
 import { RootStackParamList } from './types';
 import {
   createStackNavigator,
@@ -11,9 +11,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export const CustomerNavigator = (): JSX.Element => {
   return (
-    <Stack.Navigator mode='card'>
+    <Stack.Navigator>
       <Stack.Screen
-        name='Home'
+        name='Shop'
         component={CustomerScreens.HomeScreen}
         options={{
           header: (props: StackHeaderProps) => <MainHeader {...props} />,

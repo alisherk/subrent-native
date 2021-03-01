@@ -1,5 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { flushRentalReducer } from 'redux/actions';
 import { RootState } from 'redux/reducers';
 import { RentalScreenProps } from 'navigation';
 import { StyleSheet, Platform } from 'react-native';
@@ -18,10 +19,15 @@ import {
 } from 'native-base';
 
 export const RentalScreen = ({ navigation }: RentalScreenProps) => {
-  const rental = useSelector(
-    (state: RootState) => state.rentals.fetchedRental
-  );
+  const dispatch = useDispatch();
+  const rental = useSelector((state: RootState) => state.rentals.fetchedRental);
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
+
+  useEffect(() => {
+    return () => {
+      dispatch(flushRentalReducer());
+    };
+  }, []);
 
   const handleGoToCheckout = (): void => {
     navigation.navigate('Checkout');

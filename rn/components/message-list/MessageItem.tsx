@@ -2,16 +2,16 @@ import React from 'react';
 import { ListItem, Text, Left, Body, Thumbnail } from 'native-base';
 import { getEnvVariables } from 'env';
 
-interface MessageProps {
+interface MessageItemProps {
   author: string;
   text: string;
 }
 
-export const Message = ({ author, text }: MessageProps) => {
+export const MessageItem = ({ author, text }: MessageItemProps) => {
   return (
     <ListItem thumbnail>
       <Left>
-        <Thumbnail square source={{ uri: getEnvVariables().emptyAvatar }} />
+        <Thumbnail square source={{ uri: getEnvVariables().emptyAvatar, cache: 'only-if-cached' }} />
       </Left>
       <Body>
         <Text>{author}</Text>
