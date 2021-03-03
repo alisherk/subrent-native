@@ -6,7 +6,7 @@ export type calculationResult = {
   duration: number;
 } | null;
 
-export function calculate(
+export function calculatePrice(
   startDate: Date,
   endDate: Date,
   price: number = 0

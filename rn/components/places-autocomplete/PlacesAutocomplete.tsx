@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Item, Input, Text, Icon, View } from 'native-base';
-import { queryStringify, debounce } from 'screens/utils';
+import { queryStringify } from 'utils/queryStringify';
+import { debounce } from 'utils/debounce';
 import { getEnvVariables } from 'env';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
@@ -12,12 +13,7 @@ import {
   NativeSyntheticEvent,
   TextStyle,
   TextInputKeyPressEventData,
-  YellowBox
 } from 'react-native';
-
-YellowBox.ignoreWarnings([
-  'VirtualizedLists should never be nested', // TODO: Remove when fixed
-])
 
 const apiKey = getEnvVariables().firebaseConfig.apiKey;
 

@@ -1,4 +1,4 @@
-import { debounce } from '..';
+import { debounce } from '../debounce';
 
 // tell jest to mock all timeout functions
 jest.useFakeTimers();
@@ -21,7 +21,7 @@ describe('debounce', () => {
 
   it('execute once immediately', () => {
     const func: jest.Mock = jest.fn();
-    debouncedFunc = debounce(func, 1000, { isImmediate: true });
+    debouncedFunc = debounce(func, 1000);
     debouncedFunc();
     expect(func).toBeCalledTimes(1);
   });

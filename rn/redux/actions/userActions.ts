@@ -1,7 +1,7 @@
 import { firebase } from 'gateway';
 import { QuerySnapshot, FirestoreQuery } from 'gateway/types';
 import { Message } from 'common';
-import { store } from '../store';
+import { dispatch } from '../setup-store';
 import cuid from 'cuid';
 import {
   AppThunk,
@@ -19,13 +19,13 @@ const dispatchMessageByType = (
   messages: Message[]
 ) => {
   if (type === MessageTypes.RENTAL_MESSAGES) {
-    store.dispatch<GetRentalMessagesSuccess>({
+    dispatch<GetRentalMessagesSuccess>({
       type: MessageActionTypes.DISPATCH_RENTAL_MESSAGES,
       payload: { messages },
     });
     return;
   }
-  store.dispatch<GetMessagesSuccess>({
+  dispatch<GetMessagesSuccess>({
     type: MessageActionTypes.DISPATCH_MESSAGES,
     payload: { messages },
   });
@@ -61,18 +61,22 @@ export const getMessages = (
 interface ContactOwnerArgs {
   text: string;
   rentalId: string | undefined;
-  secondaryPartId: string | undefined;
+  rentalName: string | undefined; 
+  expoToken: string | undefined; 
+  participantId: string | undefined;
   messageType: MessageTypes;
 }
 
 export const contactOwner = ({
   text,
   rentalId,
-  secondaryPartId,
+  rentalName, 
+  expoToken,
+  participantId,
   messageType,
 }: ContactOwnerArgs): AppThunk => async (dispatch, getState) => {
   const authedUser = getState().auth.authedUser;
-  if (!authedUser || !rentalId || !secondaryPartId) {
+  if (!authedUser || !rentalId || !participantId ||!rentalName) {
     dispatch<MessageError>({
       type: MessageActionTypes.MESSAGE_ERROR,
       payload: {
@@ -88,12 +92,14 @@ export const contactOwner = ({
       authorUid: authedUser.uid,
       authorImage: authedUser.photoURL,
       rentalId: rentalId,
+      rentalName: rentalName, 
       date: firebase.addServerTimestamp(),
       text: text,
+      expoToken: expoToken || null
     };
     await messageColRef.add({
       ...message,
-      participants: [authedUser.uid, secondaryPartId],
+      participants: [authedUser.uid, participantId],
     });
     const storeMessage = Object.assign({}, message, { id: cuid() });
     dispatch<DispatchMessageSuccess>({

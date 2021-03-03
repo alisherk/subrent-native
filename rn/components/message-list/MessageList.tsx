@@ -1,36 +1,27 @@
 import React from 'react';
-import { TouchableMessage } from './TouchableMessage';
-import { MessageItem } from './MessageItem';
-import { FlatList } from 'react-native';
+import { TouchableMessages } from './TouchableMessages';
+import { PlainMessages } from './PlainMessages';
 import { Message } from 'common';
 
-interface MessageListProps {
+interface Props {
   messages: Message[];
   onSelect?: (message: Message) => void;
   touchable?: boolean;
 }
 
-type Item = {
-  item: Message;
+const Messages = ({ messages, touchable, onSelect }: Props) => {
+  if (touchable) {
+    return <TouchableMessages messages={messages} onSelect={onSelect} />;
+  }
+  return <PlainMessages messages={messages} />;
 };
 
 export const MessageList = ({
   messages,
   onSelect,
   touchable = false,
-}: MessageListProps) => {
-
-  const renderItem = ({ item }: Item) => {
-    if (touchable) {
-      return (
-        <TouchableMessage
-          author={item.author}
-          text={item.text}
-          onSelect={() => onSelect?.(item)}
-        />
-      );
-    }
-    return <MessageItem author={item.author} text={item.text} />;
-  };
-  return <FlatList data={messages} renderItem={renderItem} />;
+}: Props) => {
+  return (
+    <Messages messages={messages} touchable={touchable} onSelect={onSelect} />
+  );
 };

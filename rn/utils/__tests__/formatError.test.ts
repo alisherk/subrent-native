@@ -1,4 +1,4 @@
-import { formatError } from '..';
+import { formatError } from '../formatError';
 
 describe('formatError', () => {
 

@@ -6,7 +6,7 @@ import { SignUpFields } from './SignUpFields';
 import { ResetPasswordScreen } from './ResetPasswordScreen';
 import { LoginScreenProps } from 'navigation';
 import { Row, Toast } from 'native-base';
-import { formatError } from '../utils';
+import { formatError } from 'utils/formatError';
 import { HeaderBackButton } from '@react-navigation/stack';
 import { useDispatch } from 'react-redux';
 import * as actions from 'redux/actions';

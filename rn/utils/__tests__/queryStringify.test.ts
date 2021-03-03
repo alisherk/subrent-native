@@ -1,4 +1,4 @@
-import { queryStringify } from '..';
+import { queryStringify } from '../queryStringify';
 
 describe('queryStringify', () => {
 

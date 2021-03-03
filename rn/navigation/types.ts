@@ -11,7 +11,7 @@ export type RootStackParamList = {
   Notifications: undefined;
   Category: { category: string };
   Rental: undefined;
-  'Contact Owner': { rentalId: string};
+  'Contact Owner': { rentalId: string} | undefined;
   Checkout: undefined;
   Stripe: { sessionId: string };
   'My Store': undefined | { screen: string };

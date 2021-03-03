@@ -3,7 +3,7 @@ import { Content, Text, Row } from 'native-base';
 import { MessageList } from 'components/message-list';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMessages, flushMessageReducer, MessageTypes } from 'redux/actions';
-import { RootState } from 'redux/reducers';
+import { RootState } from 'redux/reducers/rootReducer';
 import { StyleSheet } from 'react-native';
 import { firebase } from 'gateway';
 import { Message } from 'common';
@@ -46,6 +46,7 @@ export const MessageScreen = ({ navigation }: MessageScreenProps): JSX.Element =
     </Content>
   );
 };
+
 const styles = StyleSheet.create({
   row: { justifyContent: 'center', marginTop: 15 },
 });

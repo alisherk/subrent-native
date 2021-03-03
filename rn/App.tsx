@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
+import { store } from './redux/setup-store';
 import { RootNavigator } from './navigation/RootNavigator';
 import { AppLoading } from 'expo';
 import { fixFirebaseTimer } from './timerFix';

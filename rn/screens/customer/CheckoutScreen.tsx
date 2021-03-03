@@ -2,7 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { createStripeSession } from 'gateway/functions';
-import { calculate, calculationResult } from './utils';
+import { calculatePrice, calculationResult } from 'utils/calculatePrice';
 import { Spinner } from 'components/spinner';
 import { RadioInput, RadioOption } from 'components/form';
 import { Rental } from 'common';
@@ -71,7 +71,7 @@ export function reducer(state: State, action: Action): State {
         price_choice = PriceChoices.half_day_price;
         price = action.rental.half_day_price;
       }
-      const calculation: calculationResult = calculate(
+      const calculation: calculationResult = calculatePrice(
         state.fromDate,
         state.toDate,
         parseInt(price)
@@ -88,7 +88,7 @@ export function reducer(state: State, action: Action): State {
         state.price_choice === PriceChoices.full_day_price
           ? action.rental.full_day_price
           : action.rental.half_day_price;
-      const calculation: calculationResult = calculate(
+      const calculation: calculationResult = calculatePrice(
         state.fromDate,
         state.toDate,
         parseInt(price)
