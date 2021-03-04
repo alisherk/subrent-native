@@ -1,21 +1,25 @@
 import React, { useEffect } from 'react';
 import { Form } from 'components/form';
 import { MessageList } from 'components/message-list';
-import { Content, Row, Text } from 'native-base';
+import { Row, Text } from 'native-base';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMessages, contactOwner, MessageTypes } from 'redux/actions';
-import { RootState } from 'redux/reducers';
+import { getMessages, sendMessage, MessageTypes } from 'redux/actions';
+import { RootState } from 'redux/reducers/rootReducer';
 import { firebase } from 'gateway';
+import { MessagerScreenProps } from 'navigation';
 
 type FormValues = {
   message: string;
 };
 
-export const MessengerScreen = ({ route, navigation }: any) => {
+export const MessengerScreen = ({ route }: MessagerScreenProps) => {
   const dispatch = useDispatch();
-  const rentalMessages = useSelector((state: RootState) => state.messages.rentalMessages);
+  const rentalMessages = useSelector(
+    (state: RootState) => state.messages.rentalMessages
+  );
   const error = useSelector((state: RootState) => state.messages.error);
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
+  
   const query = firebase.db
     .collection('messages')
     .where('rentalId', '==', route.params.rentalId)
@@ -28,11 +32,11 @@ export const MessengerScreen = ({ route, navigation }: any) => {
   const handleSubmit = async ({ message }: FormValues) => {
     try {
       await dispatch(
-        contactOwner({
+        sendMessage({
           text: message,
           rentalId: route.params.rentalId,
-          secondaryPartId: route.params.messageOwnerUid,
-          messageType: MessageTypes.RENTAL_MESSAGES
+          participantId: route.params.messageOwnerUid,
+          messageType: MessageTypes.RENTAL_MESSAGES,
         })
       );
     } catch (error) {
@@ -42,7 +46,7 @@ export const MessengerScreen = ({ route, navigation }: any) => {
   return (
     <Form<FormValues>>
       {(formState) => (
-        <Content>
+        <>
           <Row>
             <Form.TextArea name='message' rows={3} rules={{ required: true }} />
           </Row>
@@ -60,7 +64,7 @@ export const MessengerScreen = ({ route, navigation }: any) => {
           ) : (
             <MessageList messages={rentalMessages} />
           )}
-        </Content>
+        </>
       )}
     </Form>
   );

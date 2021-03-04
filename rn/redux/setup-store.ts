@@ -12,4 +12,3 @@ if (process.env.NODE_ENV !== 'production') {
 
 export const store = createStore(rootReducer, composedEnhancer);
 
-export const dispatch = store.dispatch; 

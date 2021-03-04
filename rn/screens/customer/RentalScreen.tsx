@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { flushRentalReducer } from 'redux/actions';
 import { RootState } from 'redux/reducers';
 import { RentalScreenProps } from 'navigation';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { MapPreview as Map } from 'components/map-preview';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   msgBtnText: { color: 'white' },
   text: { marginLeft: 5 },
   icon: {
-    color: Platform.OS === 'android' ? 'white' : 'gray',
+    color: 'gray',
     margin: 5,
   },
 });

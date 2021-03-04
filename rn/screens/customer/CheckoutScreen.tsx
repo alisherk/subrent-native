@@ -7,9 +7,10 @@ import { Spinner } from 'components/spinner';
 import { RadioInput, RadioOption } from 'components/form';
 import { Rental } from 'common';
 import { RootState } from 'redux/reducers';
-import { CheckoutScreenNavigationProp } from 'navigation';
+import { CheckoutScreenProps } from 'navigation';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Container, Text, Content, Button, Card, CardItem } from 'native-base';
+import { format } from 'date-fns';
 
 const PriceOptions: RadioOption[] = [
   {
@@ -28,9 +29,9 @@ const PriceOptions: RadioOption[] = [
   },
 ];
 
-interface CheckoutScreenProps {
-  navigation: CheckoutScreenNavigationProp;
-  route: CheckoutScreenNavigationProp;
+export enum PriceChoices {
+  full_day_price = 'full_day_price',
+  half_day_price = 'half_day_price',
 }
 
 export enum ActionTypes {
@@ -40,11 +41,14 @@ export enum ActionTypes {
   ON_PRICE_CHANGE = 'ON_PRICE_CHANGE',
   FROM = 'fromDate',
   TO = 'toDate',
+  SHOW_DATEPICKER = 'SHOW_DATEPICKER',
 }
 
-export enum PriceChoices {
-  full_day_price = 'full_day_price',
-  half_day_price = 'half_day_price',
+export enum Identifiers {
+  SHOW_FROM_PICKER = 'showFromDatePicker',
+  SHOW_TO_PICKER = 'showToDatePicker',
+  FROM = 'fromDate',
+  TO = 'toDate',
 }
 
 export type State = {
@@ -54,16 +58,25 @@ export type State = {
   duration: number;
   loading: boolean;
   price_choice: string;
+  showFromDatePicker: boolean;
+  showToDatePicker: boolean;
 };
 
 export type Action =
+  | { type: ActionTypes.SHOW_DATEPICKER; datePickerType: string; flag: boolean }
   | { type: ActionTypes.CALCULATE; rental: Rental }
-  | { type: ActionTypes.SET_DATE; dateType: string; value: Date | undefined }
+  | { type: ActionTypes.SET_DATE; dateType: string; value: Date }
   | { type: ActionTypes.ON_LOAD; loading: boolean }
   | { type: ActionTypes.ON_PRICE_CHANGE; rental: Rental };
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case ActionTypes.SHOW_DATEPICKER: {
+      return {
+        ...state,
+        [action.datePickerType]: action.flag,
+      };
+    }
     case ActionTypes.ON_PRICE_CHANGE: {
       let price_choice = PriceChoices.full_day_price;
       let price = action.rental.full_day_price;
@@ -99,9 +112,13 @@ export function reducer(state: State, action: Action): State {
         duration: calculation ? calculation.duration : 0,
       };
     case ActionTypes.SET_DATE:
+      let datePickerType = Identifiers.SHOW_TO_PICKER;
+      if (action.dateType === Identifiers.FROM)
+        datePickerType = Identifiers.SHOW_FROM_PICKER;
       return {
         ...state,
         [action.dateType]: action.value,
+        [datePickerType]: false,
       };
     case ActionTypes.ON_LOAD:
       return {
@@ -118,6 +135,8 @@ const initialState: State = {
   //need to set hours to the start of the day so that same day evaluation works correctly
   fromDate: new Date(new Date().setHours(0, 0, 0, 0)),
   toDate: new Date(),
+  showFromDatePicker: false,
+  showToDatePicker: false,
   duration: 0,
   loading: false,
   price_choice: PriceChoices.full_day_price,
@@ -126,22 +145,43 @@ const initialState: State = {
 export const CheckoutScreen = ({
   navigation,
 }: CheckoutScreenProps): JSX.Element => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      fromDate,
+      toDate,
+      total,
+      duration,
+      loading,
+      price_choice,
+      showFromDatePicker,
+      showToDatePicker,
+    },
+    dispatch,
+  ] = useReducer(reducer, initialState);
+
   const rental = useSelector(
     (state: RootState) => state.rentals.fetchedRental!
   );
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
 
-  const handleDateChange = (date: Date | undefined) => (type: string) => {
-    dispatch({ type: ActionTypes.SET_DATE, dateType: type, value: date });
-  };
-
-  const { fromDate, toDate, total, duration, loading, price_choice } = state;
-
   useEffect(() => {
     if (!fromDate || !toDate) return;
     dispatch({ type: ActionTypes.CALCULATE, rental });
   }, [fromDate, toDate]);
+
+  const handleShowDatePicker = (pickerType: string, flag: boolean) => {
+    dispatch({
+      type: ActionTypes.SHOW_DATEPICKER,
+      datePickerType: pickerType,
+      flag,
+    });
+  };
+
+  const handleDateChange = (date: Date | undefined) => (type: string) => {
+    if (!date) return;
+    console.log(type)
+    dispatch({ type: ActionTypes.SET_DATE, dateType: type, value: date });
+  };
 
   const handlePriceChange = (): void => {
     dispatch({ type: ActionTypes.ON_PRICE_CHANGE, rental });
@@ -159,12 +199,14 @@ export const CheckoutScreen = ({
     }
 
     if (duration <= 0) {
-      return Alert.alert(
+      Alert.alert(
         'Incorrect dates',
         'Please ensure that your dates are not on the same date or in the past.',
         [{ text: 'OK', style: 'default' }]
       );
+      return;
     }
+
     try {
       dispatch({ type: ActionTypes.ON_LOAD, loading: true });
       const { sessionId } = await createStripeSession({
@@ -178,7 +220,7 @@ export const CheckoutScreen = ({
     } catch (err) {
       dispatch({ type: ActionTypes.ON_LOAD, loading: false });
       if (err.message === 'You are not authorized. Please login or register.') {
-        return Alert.alert('Authentication error', err.message, [
+        Alert.alert('Authentication error', err.message, [
           { text: 'Cancel', style: 'cancel' },
           {
             text: 'Login',
@@ -186,8 +228,9 @@ export const CheckoutScreen = ({
             onPress: () => navigation.navigate('Login', { origin: 'Checkout' }),
           },
         ]);
+        return;
       }
-      return Alert.alert('Checkout error', err.message, [
+      Alert.alert('Checkout error', err.message, [
         { text: 'Cancel', style: 'cancel' },
       ]);
     }
@@ -204,20 +247,37 @@ export const CheckoutScreen = ({
             />
           </CardItem>
           <CardItem bordered style={styles.row}>
-            <Text> From: </Text>
-            <DateTimePicker
-              style={styles.datePickerStyle}
-              display='spinner'
-              value={fromDate}
-              onChange={(e, date) => handleDateChange(date)(ActionTypes.FROM)}
-            />
-            <Text> To: </Text>
-            <DateTimePicker
-              style={styles.datePickerStyle}
-              display='inline'
-              value={toDate}
-              onChange={(e, date) => handleDateChange(date)(ActionTypes.TO)}
-            />
+            <Text
+              onPress={() =>
+                handleShowDatePicker(Identifiers.SHOW_FROM_PICKER, true)
+              }
+            >
+              From: {format(fromDate, 'MMM d, Y')}
+            </Text>
+            {showFromDatePicker && (
+              <DateTimePicker
+                style={styles.datePickerStyle}
+                display='spinner'
+                value={fromDate}
+                onChange={(e, date) => handleDateChange(date)(Identifiers.FROM)}
+              />
+            )}
+
+            <Text
+              onPress={() =>
+                handleShowDatePicker(Identifiers.SHOW_TO_PICKER, true)
+              }
+            >
+              To: {format(toDate, 'MMM d, Y')}
+            </Text>
+            {showToDatePicker && (
+              <DateTimePicker
+                style={styles.datePickerStyle}
+                display='spinner'
+                value={toDate}
+                onChange={(e, date) => handleDateChange(date)(Identifiers.TO)}
+              />
+            )}
           </CardItem>
           <CardItem bordered style={styles.row}>
             <Text> GST: 5% </Text>
@@ -250,7 +310,7 @@ export const CheckoutScreen = ({
 };
 
 const styles = StyleSheet.create({
-  row: { height: 60 },
+  row: { height: 60, justifyContent: 'space-between' },
   bottomRow: { justifyContent: 'space-between' },
   datePickerStyle: { width: '40%', height: 50 },
 });

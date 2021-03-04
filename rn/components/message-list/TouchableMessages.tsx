@@ -23,7 +23,7 @@ export const TouchableMessages = ({
                 square
                 source={{
                   uri: getEnvVariables().emptyAvatar,
-                  cache: 'only-if-cached',
+                  cache: 'default',
                 }}
               />
               <Col>

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/reducers';
+import { RootState } from 'redux/reducers/rootReducer';
 import { StyleSheet, ViewStyle, Platform, } from 'react-native';
 import {
   Header,
@@ -33,13 +33,12 @@ export const MainHeader = ({
     (fl: string) => fl.toUpperCase()
   );
 
-
   const renderThumbnail = () => {
     if (authedUser) {
       return (
         <View style={defaultStyles.thumbContainer}>
           {userImageRef.current ? (
-            <Thumbnail small source={{ uri: userImageRef.current, cache: 'only-if-cached' }} />
+            <Thumbnail small source={{ uri: userImageRef.current, cache: 'reload' }} />
           ) : (
             <Icon name='person' style={defaultStyles.iconStyle} />
           )}

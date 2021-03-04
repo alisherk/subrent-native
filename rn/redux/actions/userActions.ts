@@ -1,7 +1,7 @@
 import { firebase } from 'gateway';
 import { QuerySnapshot, FirestoreQuery } from 'gateway/types';
 import { Message } from 'common';
-import { dispatch } from '../setup-store';
+import { Dispatch } from 'redux';
 import cuid from 'cuid';
 import {
   AppThunk,
@@ -16,7 +16,8 @@ import {
 
 const dispatchMessageByType = (
   type: MessageTypes,
-  messages: Message[]
+  messages: Message[], 
+  dispatch: Dispatch
 ) => {
   if (type === MessageTypes.RENTAL_MESSAGES) {
     dispatch<GetRentalMessagesSuccess>({
@@ -48,7 +49,7 @@ export const getMessages = (
     messageSnapshot.forEach((message) => {
       messages.push({ id: message.id, ...message.data() });
     });
-    dispatchMessageByType(messageType, messages);
+    dispatchMessageByType(messageType, messages, dispatch);
   } catch (error) {
     console.log(error);
     dispatch<MessageError>({
@@ -58,25 +59,25 @@ export const getMessages = (
   }
 };
 
-interface ContactOwnerArgs {
+interface SendMessageArgs {
   text: string;
   rentalId: string | undefined;
-  rentalName: string | undefined; 
-  expoToken: string | undefined; 
+  rentalName?: string | undefined; 
+  expoToken?: string | null; 
   participantId: string | undefined;
   messageType: MessageTypes;
 }
 
-export const contactOwner = ({
+export const sendMessage = ({
   text,
   rentalId,
   rentalName, 
   expoToken,
   participantId,
   messageType,
-}: ContactOwnerArgs): AppThunk => async (dispatch, getState) => {
+}: SendMessageArgs): AppThunk => async (dispatch, getState) => {
   const authedUser = getState().auth.authedUser;
-  if (!authedUser || !rentalId || !participantId ||!rentalName) {
+  if (!authedUser || !rentalId || !participantId) {
     dispatch<MessageError>({
       type: MessageActionTypes.MESSAGE_ERROR,
       payload: {
@@ -92,7 +93,7 @@ export const contactOwner = ({
       authorUid: authedUser.uid,
       authorImage: authedUser.photoURL,
       rentalId: rentalId,
-      rentalName: rentalName, 
+      rentalName: rentalName || null, 
       date: firebase.addServerTimestamp(),
       text: text,
       expoToken: expoToken || null

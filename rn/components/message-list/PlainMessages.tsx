@@ -17,7 +17,7 @@ export const PlainMessages = ({ messages }: PlainMessageProps) => {
               square
               source={{
                 uri: getEnvVariables().emptyAvatar,
-                cache: 'only-if-cached',
+                cache: 'default',
               }}
             />
           </Left>

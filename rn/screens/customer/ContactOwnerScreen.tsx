@@ -10,7 +10,7 @@ import { getTokenWithUserPermission } from 'utils/getTokenWithUserPermission';
 import { ContactOwnerScreenProps } from 'navigation';
 import { StyleSheet } from 'react-native';
 import {
-  contactOwner,
+  sendMessage,
   getMessages,
   flushMessageReducer,
   MessageTypes,
@@ -25,7 +25,7 @@ export const ContactOwnerScreen = ({
 }: ContactOwnerScreenProps): JSX.Element => {
   const dispatch = useDispatch();
   const [notififications, toggleNotifications] = useState<boolean>(false);
-  const [expoToken, setExpoToken] = useState<string | undefined>();
+  const [expoToken, setExpoToken] = useState<string | null>(null);
   const rental = useSelector((state: RootState) => state.rentals.fetchedRental);
   const error = useSelector((state: RootState) => state.messages.error);
   const authedUser = useSelector((state: RootState) => state.auth.authedUser);
@@ -46,20 +46,19 @@ export const ContactOwnerScreen = ({
   }, []);
 
   const handleNotifications = async (): Promise<void> => {
-     toggleNotifications((prevState) => !prevState);
+    toggleNotifications((prevState) => !prevState);
     if (expoToken) {
-      setExpoToken(undefined);
+      setExpoToken(null);
       return;
     }
-   
     const newExpoToken = await getTokenWithUserPermission();
-    setExpoToken(newExpoToken);
+    if(newExpoToken) setExpoToken(newExpoToken);
   };
 
   const handleSubmit = async ({ message }: FormValues) => {
     try {
       await dispatch(
-        contactOwner({
+        sendMessage({
           text: message,
           rentalId: rental?.id,
           rentalName: rental?.name,
@@ -81,7 +80,7 @@ export const ContactOwnerScreen = ({
   return (
     <Form<FormValues>>
       {(formState) => (
-        <Content>
+        <>
           <Row style={styles.notificationToggle}>
             <Switch
               value={notififications}
@@ -106,7 +105,7 @@ export const ContactOwnerScreen = ({
           ) : (
             <MessageList messages={rentalMessages} />
           )}
-        </Content>
+        </>
       )}
     </Form>
   );

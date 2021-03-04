@@ -24,7 +24,7 @@ export type Message = {
   authorUid: string;
   authorImage: string | null;
   rentalId: string;
-  rentalName: string;
+  rentalName: string | null;
   expoToken: string | null; 
   text: string;
   date: any;

@@ -38,6 +38,12 @@ export type ContactOwnerScreenProps = StackScreenProps<
   'Contact Owner'
 >;
 
+export type CheckoutScreenProps = StackScreenProps<
+  RootStackParamList,
+  'Checkout'
+>;
+
+
 export type StripeScreenProps = StackScreenProps<
   RootStackParamList,
   'Stripe'
@@ -59,9 +65,15 @@ export type ManageRentalScreenProps = StackScreenProps<
   RootStackParamList,
   'My Rentals'
 >;
+
 export type MessageScreenProps = StackScreenProps<
   RootStackParamList,
   'Messages'
+>;
+
+export type MessagerScreenProps = StackScreenProps<
+  RootStackParamList,
+  'Messenger'
 >;
 
 export type NotificationsScreenNavigationProp = StackNavigationProp<
@@ -69,10 +81,6 @@ export type NotificationsScreenNavigationProp = StackNavigationProp<
   'Notifications'
 >;
 
-export type CheckoutScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Checkout'
->;
 
 export type AppNavigationProp = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>,
