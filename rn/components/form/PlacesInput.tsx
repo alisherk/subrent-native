@@ -1,8 +1,9 @@
 import React from 'react';
 import { PlacesAutoComplete, PlacesProps } from '../places-autocomplete';
-import { Row, Text, View } from 'native-base';
+import { Text } from 'react-native-elements';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Rules } from './types';
+import { View } from 'react-native';
 
 export interface PlacesInputProps extends PlacesProps {
   rules: Rules;
@@ -39,11 +40,11 @@ export const PlacesInput = ({
             timeToWait={timeToWait}
             defaultValue={defaultValue}
           />
-          <Row style={{ marginLeft: 5 }}>
+          <View style={{ marginLeft: 5 }}>
             {errors[name] && (
               <Text style={{ color: 'red' }}>{errors[name].message}</Text>
             )}
-          </Row>
+          </View>
         </View>
       )}
       name={name}

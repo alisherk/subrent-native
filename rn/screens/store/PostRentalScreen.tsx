@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Row } from 'native-base';
 import { Alert, View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useDocument } from 'hooks';
@@ -142,7 +141,7 @@ export const PostRentalScreen = ({
             rules={{ required: 'Instructions are required' }}
             defaultValue={doc?.instructions}
           />
-          <Form.Picker
+      {/*     <Form.Picker
             name='category'
             headerTitle='Equipment category'
             placeholderText='Select option'
@@ -166,7 +165,7 @@ export const PostRentalScreen = ({
             options={YesNoOptions}
             specialMessage='Yes means contact me before paying'
             defaultValue={doc?.confirmation_required}
-          />
+          /> */}
           <Form.PlacesInput
             name='region'
             placeholderText='Postal Code or City'
@@ -191,7 +190,7 @@ export const PostRentalScreen = ({
             />
           </View>
           {route.params?.rentalId ? (
-            <Row style={styles.btnGroupRow}>
+            <View style={styles.btnGroupRow}>
               <Form.Button
                 disabled={!formState.isValid || formState.isSubmitting}
                 buttonName='Update'
@@ -204,7 +203,7 @@ export const PostRentalScreen = ({
                 onSubmit={handleDelete}
                 textStyle={styles.deleteBtnText}
               />
-            </Row>
+            </View>
           ) : (
             <>
               <Form.Button

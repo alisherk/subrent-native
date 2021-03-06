@@ -3,10 +3,11 @@ import { RootStackParamList } from './types';
 import { StoreNavigator } from './StoreNavigator';
 import { TabsNavigator } from './TabsNavigator';
 import { LoginNavigator } from './LoginNavigator';
-import { Icon, Button, Text, Toast } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
 import { signOut } from 'redux/actions';
+import { Button, Icon, Text } from 'react-native-elements';
+import { Colors } from 'theme'
 import {
   createDrawerNavigator,
   DrawerItemList,
@@ -14,9 +15,6 @@ import {
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 
-type Color = {
-  color: string;
-};
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -29,15 +27,15 @@ export const DrawerNavigator = (): JSX.Element => {
   }: DrawerContentComponentProps): Promise<void> => {
     await dispatch(signOut());
     navigation.closeDrawer();
-    Toast.show({
-      text: 'Success. Check your inbox for further instruction',
-      buttonText: 'OK',
-      duration: 4000,
-    });
   };
 
   return (
     <Drawer.Navigator
+      drawerType='front'
+      drawerContentOptions={{
+        activeTintColor: Colors.mainColor,
+        inactiveTintColor: 'gray',
+      }}
       drawerContent={(props: DrawerContentComponentProps) => {
         return (
           <DrawerContentScrollView {...props}>
@@ -45,8 +43,6 @@ export const DrawerNavigator = (): JSX.Element => {
             {authedUser && (
               <Button
                 onPress={() => handleLogout(props)}
-                danger
-                transparent
                 style={{ marginLeft: 6 }}
               >
                 <Icon name='log-out' />
@@ -63,18 +59,16 @@ export const DrawerNavigator = (): JSX.Element => {
             name='Shop'
             component={TabsNavigator}
             options={{
-              drawerIcon: ({ color }: Color) => (
-                <Icon name='cart' style={{ color }} />
-              ),
+              drawerIcon: (props) => {
+                return <Icon name='shopping-cart' {...props} />;
+              },
             }}
           />
           <Drawer.Screen
             name='My Store'
             component={StoreNavigator}
             options={{
-              drawerIcon: ({ color }: Color) => (
-                <Icon name='home' style={{ color }} />
-              ),
+              drawerIcon: (props) => <Icon name='home' {...props} />,
             }}
           />
         </>
@@ -84,18 +78,14 @@ export const DrawerNavigator = (): JSX.Element => {
             name='Shop'
             component={TabsNavigator}
             options={{
-              drawerIcon: ({ color }: Color) => (
-                <Icon name='cart' style={{ color }} />
-              ),
+              drawerIcon: (props) => <Icon name='shopping-cart' {...props} />,
             }}
           />
           <Drawer.Screen
             name='Login'
             component={LoginNavigator}
             options={{
-              drawerIcon: ({ color }: Color) => (
-                <Icon name='log-in' style={{ color }} />
-              ),
+              drawerIcon: (props) => <Icon name='login' {...props} />,
             }}
           />
         </>

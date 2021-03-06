@@ -1,6 +1,6 @@
 import React from 'react';
-import { GestureResponderEvent } from 'react-native';
-import * as NativeBase from 'native-base';
+import { GestureResponderEvent, View } from 'react-native';
+import { CheckBox as NativeCheckbox, Text } from 'react-native-elements';
 
 export type CheckBoxOption = { id: number; value: string; label: string };
 
@@ -21,30 +21,27 @@ export const CheckBox = ({
 }: CheckBoxProps): JSX.Element => {
   return (
     <>
-      <NativeBase.Label style={{ marginLeft: 20, marginVertical: 10 }}>
+      <Text>
         {checkBoxOptionsTitle}
-      </NativeBase.Label>
-      <NativeBase.ListItem>
+      </Text>
+      <View>
         {options.map((option: CheckBoxOption) => (
-          <NativeBase.Row
+          <View
             key={option.id}
             style={{ justifyContent: 'space-evenly' }}
           >
-            <NativeBase.CheckBox
+            <NativeCheckbox
               checked={value === option.value}
-              onPress={(e: GestureResponderEvent) =>
-                handlePress(e, option.value)
-              }
             />
-            <NativeBase.Text> {option.label}</NativeBase.Text>
-          </NativeBase.Row>
+            <Text> {option.label}</Text>
+          </View>
         ))}
-      </NativeBase.ListItem>
-      <NativeBase.Row style={{ marginLeft: 12, padding: 5 }}>
+      </View>
+      <View>
         {error && (
-          <NativeBase.Text style={{ color: 'red' }}>{error}</NativeBase.Text>
+          <Text style={{ color: 'red' }}>{error}</Text>
         )}
-      </NativeBase.Row>
+      </View>
     </>
   );
 };

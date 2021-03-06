@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import { Form } from 'components/form';
 import { MessageList } from 'components/message-list';
-import { Row, Text } from 'native-base';
+import { Text } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMessages, sendMessage, MessageTypes } from 'redux/actions';
 import { RootState } from 'redux/reducers/rootReducer';
@@ -47,20 +48,20 @@ export const MessengerScreen = ({ route }: MessagerScreenProps) => {
     <Form<FormValues>>
       {(formState) => (
         <>
-          <Row>
+          <View>
             <Form.TextArea name='message' rows={3} rules={{ required: true }} />
-          </Row>
-          <Row style={{ justifyContent: 'flex-end', marginTop: 10 }}>
+          </View>
+          <View style={{ justifyContent: 'flex-end', marginTop: 10 }}>
             <Form.Button<FormValues>
               buttonName='Send'
               onSubmit={handleSubmit}
               disabled={formState.isSubmitting || !formState.isValid}
             />
-          </Row>
+          </View>
           {error ? (
-            <Row style={{ justifyContent: 'center', marginTop: 15 }}>
+            <View style={{ justifyContent: 'center', marginTop: 15 }}>
               <Text>{error}</Text>
-            </Row>
+            </View>
           ) : (
             <MessageList messages={rentalMessages} />
           )}

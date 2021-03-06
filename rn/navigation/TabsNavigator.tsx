@@ -1,7 +1,7 @@
 import React from 'react';
 import { RootStackParamList } from './types';
 import { CustomerNavigator } from './CustomerNavigator';
-import { Icon } from 'native-base';
+import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 import {
   createBottomTabNavigator,
@@ -12,17 +12,18 @@ type Icons = {
   [key: string]: string;
 };
 
+const icons: Icons = {
+  Shop: 'home',
+};
+
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
 export const TabsNavigator = (): JSX.Element => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }: any): BottomTabNavigationOptions => ({
-        tabBarIcon: ({ color }) => {
-          const icons: Icons = {
-            Home: 'home',
-          };
-          return <Icon name={icons[route.name]} style={{ color }} />;
+      screenOptions={({ route }): BottomTabNavigationOptions => ({
+        tabBarIcon: (props) => {
+          return <Icon name={icons[route.name]} {...props} />;
         },
       })}
       tabBarOptions={{
@@ -31,10 +32,10 @@ export const TabsNavigator = (): JSX.Element => {
       }}
     >
       <Tab.Screen
-        name='Home'
+        name='Shop'
         component={CustomerNavigator}
         options={{
-          tabBarButton: (props: any) => <TouchableOpacity {...props} />,
+          tabBarButton: (props) => <TouchableOpacity {...props} />,
         }}
       />
     </Tab.Navigator>

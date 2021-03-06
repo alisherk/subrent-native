@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { View, Image } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { flushRentalReducer } from 'redux/actions';
 import { RootState } from 'redux/reducers';
@@ -7,16 +8,11 @@ import { StyleSheet } from 'react-native';
 import { MapPreview as Map } from 'components/map-preview';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
-  Container,
-  Thumbnail,
-  Content,
   Card,
-  CardItem,
   Text,
   Button,
   Icon,
-  Row,
-} from 'native-base';
+} from 'react-native-elements';
 
 export const RentalScreen = ({ navigation }: RentalScreenProps) => {
   const dispatch = useDispatch();
@@ -42,52 +38,50 @@ export const RentalScreen = ({ navigation }: RentalScreenProps) => {
   };
 
   return (
-    <Container>
-      <Content padder>
+    <View>
         <Card>
-          <CardItem bordered>
+          <View>
             {rental?.ownerImage ? (
-              <Thumbnail source={{ uri: rental.ownerImage }} />
+              <Image source={{ uri: rental.ownerImage }} />
             ) : (
               <Icon name='person' style={styles.icon} />
             )}
             <Text style={styles.text}>{rental?.displayName}</Text>
-          </CardItem>
-          <CardItem bordered style={styles.priceRow}>
+          </View>
+          <View style={styles.priceRow}>
             <Text>Full day: ${`${rental?.full_day_price}`}</Text>
             <Text>Half day: ${`${rental?.half_day_price}`}</Text>
-          </CardItem>
-          <CardItem bordered>
+          </View>
+          <View>
             <Text>{rental?.name}</Text>
-          </CardItem>
-          <CardItem bordered>
+          </View>
+          <View>
             <Text> {rental?.description} </Text>
-          </CardItem>
-          <CardItem bordered style={styles.rowStyle}>
+          </View>
+          <View style={styles.rowStyle}>
             <Text>{rental?.region}</Text>
-          </CardItem>
-          <CardItem bordered style={styles.contactOwnerContainer}>
-            <Row>
+          </View>
+          <View style={styles.contactOwnerContainer}>
+            <View>
               <Text>
                 {rental?.confirmation_required === 'yes'
                   ? 'Please contact the owner before renting this item'
                   : "You don't need to contact the owner to rent it"}
               </Text>
-            </Row>
+            </View>
             <TouchableOpacity onPress={handleContactOwnerWithAuth}>
               <Icon name='mail' style={styles.icon} />
             </TouchableOpacity>
-          </CardItem>
-          <CardItem style={styles.bottomRow}>
+          </View>
+          <View style={styles.bottomRow}>
             <Button onPress={handleGoToCheckout}>
-              <Icon active name='cart' />
+              <Icon name='cart' />
               <Text>Rent this equipment </Text>
             </Button>
-          </CardItem>
+          </View>
         </Card>
         <Map location={rental?.g} />
-      </Content>
-    </Container>
+      </View>
   );
 };
 

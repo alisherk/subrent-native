@@ -1,5 +1,6 @@
 import React from 'react';
-import { List, ListItem, Text } from 'native-base';
+import { View } from 'react-native';
+import { ListItem, Text } from 'react-native-elements';
 import { NotificationsScreenNavigationProp } from 'navigation';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 
 export const NotificationScreen = ({ route, navigation }: Props) => {
   return (
-    <List>
+    <View>
       <ListItem>
         <Text>Simon Mignolet</Text>
       </ListItem>
@@ -19,7 +20,7 @@ export const NotificationScreen = ({ route, navigation }: Props) => {
       <ListItem>
         <Text>Dejan Lovren</Text>
       </ListItem>
-    </List>
+    </View>
   );
 };
 

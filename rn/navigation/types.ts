@@ -23,7 +23,7 @@ export type RootStackParamList = {
 
 export type StoreScreenProps = StackScreenProps<RootStackParamList, 'My Store'>;
 
-export type HomeScreenNavigationProp = StackNavigationProp<
+export type HomeScreenProps = StackScreenProps<
   RootStackParamList,
   'Shop'
 >;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Row, Text, Thumbnail, Col, Card } from 'native-base';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Text, Card } from 'react-native-elements';
 import { getEnvVariables } from 'env';
 import { Message } from 'common';
 
@@ -16,23 +16,24 @@ export const TouchableMessages = ({
   return (
     <>
       {messages.map((message) => (
-        <TouchableOpacity key={message.id} style={styles.container} onPress={() => onSelect?.(message)}>
-          <Card style={styles.card}>
-            <Row>
-              <Thumbnail
-                square
+        <TouchableOpacity
+          key={message.id}
+          style={styles.container}
+          onPress={() => onSelect?.(message)}
+        >
+          <Card>
+            <View>
+              <Image
                 source={{
                   uri: getEnvVariables().emptyAvatar,
                   cache: 'default',
                 }}
               />
-              <Col>
+              <View>
                 <Text>{message.author}</Text>
-                <Text note numberOfLines={1}>
-                  {message.text}
-                </Text>
-              </Col>
-            </Row>
+                <Text numberOfLines={1}>{message.text}</Text>
+              </View>
+            </View>
           </Card>
         </TouchableOpacity>
       ))}

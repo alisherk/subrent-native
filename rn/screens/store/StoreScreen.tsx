@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, H3 } from 'native-base';
+import { Card, Text } from 'react-native-elements';
 import { FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { StoreScreenProps, Screens } from 'navigation';
 
@@ -20,8 +20,8 @@ export const StoreScreen = ({ navigation }: StoreScreenProps): JSX.Element => {
 
   const renderItem = ({ item }: { item: CardItem }) => (
     <TouchableOpacity onPress={() => handleSelect(item.screen)}>
-      <Card style={styles.card}>
-        <H3> {item.title} </H3>
+      <Card>
+        <Text> {item.title} </Text>
       </Card>
     </TouchableOpacity>
   );

@@ -7,25 +7,16 @@ import { populateRental } from 'redux/actions';
 import { Rental } from 'common';
 import { CategoryScreenProps } from 'navigation';
 import { Card } from 'components/card';
-import { RootState } from 'redux/reducers';
-import { useSelector } from 'react-redux';
 
 export const CategoryScreen = ({
   route,
   navigation,
 }: CategoryScreenProps): JSX.Element => {
-  const authedUser = useSelector((state: RootState) => state.auth.authedUser);
   const queryRef = useRef(
     firebase.db
       .collection('rentals')
       .where('category', '==', route.params.category)
   );
-  if (authedUser) {
-    queryRef.current = firebase.db
-      .collection('rentals')
-      .where('ownerUid', '!=', authedUser?.uid)
-      .where('category', '==', route.params.category);
-  }
   const dispatch = useDispatch();
   const { rentals, hasMore, loadMore, resetLoad, reloading } = usePaginateQuery(
     queryRef.current

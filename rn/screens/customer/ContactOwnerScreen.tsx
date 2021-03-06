@@ -3,12 +3,12 @@ import { Form } from 'components/form';
 import { MessageList } from 'components/message-list';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'redux/reducers/rootReducer';
-import { Content, Row, Text, Switch } from 'native-base';
+import { Text } from 'react-native-elements';
 import { firebase } from 'gateway';
 import { sendNotification } from 'utils/sendNotification';
 import { getTokenWithUserPermission } from 'utils/getTokenWithUserPermission';
 import { ContactOwnerScreenProps } from 'navigation';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   sendMessage,
   getMessages,
@@ -81,27 +81,27 @@ export const ContactOwnerScreen = ({
     <Form<FormValues>>
       {(formState) => (
         <>
-          <Row style={styles.notificationToggle}>
-            <Switch
+          <View style={styles.notificationToggle}>
+          {/*   <Switch
               value={notififications}
               onValueChange={handleNotifications}
-            />
+            /> */}
             <Text> Allow notifications </Text>
-          </Row>
-          <Row>
+          </View>
+          <View>
             <Form.TextArea name='message' rows={3} rules={{ required: true }} />
-          </Row>
-          <Row style={styles.sendButton}>
+          </View>
+          <View style={styles.sendButton}>
             <Form.Button<FormValues>
               buttonName='Send'
               onSubmit={handleSubmit}
               disabled={formState.isSubmitting || !formState.isValid}
             />
-          </Row>
+          </View>
           {error ? (
-            <Row style={styles.error}>
+            <View style={styles.error}>
               <Text>{error}</Text>
-            </Row>
+            </View>
           ) : (
             <MessageList messages={rentalMessages} />
           )}

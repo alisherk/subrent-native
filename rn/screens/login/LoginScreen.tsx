@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle, View } from 'react-native';
+import { Button, Icon } from 'react-native-elements';
 import { Form } from 'components/form';
 import { LoginFields } from './LoginFields';
 import { SignUpFields } from './SignUpFields';
 import { ResetPasswordScreen } from './ResetPasswordScreen';
 import { LoginScreenProps } from 'navigation';
-import { Row, Toast } from 'native-base';
-import { formatError } from 'utils/formatError';
-import { HeaderBackButton } from '@react-navigation/stack';
 import { useDispatch } from 'react-redux';
 import * as actions from 'redux/actions';
+import { FontAwesome } from '@expo/vector-icons';
 
 enum Screens {
   SIGNUP = 'Sign up',
@@ -68,8 +67,8 @@ export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <HeaderBackButton
-          tintColor='white'
+        <Button
+          icon={<Icon name='arrow-back' color='white' />}
           onPress={() => {
             navigation.navigate(originRoute);
             handleSwitchScreen(Screens.LOGIN);
@@ -83,45 +82,18 @@ export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
     try {
       if (screen === Screens.RESET_PASSWORD) {
         await dispatch(actions.sendPasswordReset(formValues.email));
-        Toast.show({
-            text: 'Success. Check your inbox for further instruction',
-            buttonText: 'OK',
-            duration: 4000,
-          });
         return;
       }
       if (screen === Screens.SIGNUP) {
         await dispatch(actions.registerUser(formValues));
       } else await dispatch(actions.loginUser(formValues));
-      Toast.show({
-        text: 'Success. You are logged in!',
-        buttonText: 'OK',
-        duration: 4000,
-      });
-    } catch (err) {
-      Toast.show({
-        text: formatError(err),
-        buttonText: 'OK',
-        duration: 4000,
-      });
-    }
+    } catch (err) {}
   };
 
   const handleLoginWithGoogle = async (): Promise<void> => {
     try {
       await dispatch(actions.loginWithGoogle());
-      Toast.show({
-        text: 'Success. You are logged in!',
-        buttonText: 'OK',
-        duration: 4000,
-      });
-    } catch (err) {
-      Toast.show({
-        text: 'Oops. Could not sign you in with Google',
-        buttonText: 'OK',
-        duration: 4000,
-      });
-    }
+    } catch (err) {}
   };
 
   return (
@@ -132,26 +104,24 @@ export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
             screen={screen}
             onPress={() => handleSwitchScreen(Screens.RESET_PASSWORD)}
           />
-          <Row style={styles.btnContainer}>
+          <View style={styles.btnContainer}>
             <Form.Button
-              buttonName='Submit'
+              title='Submit'
               disabled={!formState?.isValid || formState?.isSubmitting}
               onSubmit={handleSubmit}
             />
             <Form.Button
-              buttonName={screen === Screens.LOGIN ? 'Sign up' : 'Go back'}
+              title={screen === Screens.LOGIN ? 'Sign up' : 'Go back'}
               onPress={() => handleSwitchScreen()}
+              type='outline'
             />
-          </Row>
-          <Row style={styles.googleBtnContainer}>
-            <Form.Button
-              danger
-              icon
-              iconName='logo-google'
-              buttonName='Login with Google'
-              onPress={handleLoginWithGoogle}
-            />
-          </Row>
+          </View>
+          <Button
+            type='outline'
+            containerStyle={{ alignItems: 'center'}}
+            buttonStyle={{ width: 80, borderRadius: 100, height: 80}}
+            icon={<FontAwesome name='google' size={40} color='crimson' />}
+          />
         </>
       )}
     </Form>
@@ -166,6 +136,7 @@ interface Styles {
 const styles = StyleSheet.create<Styles>({
   btnContainer: {
     justifyContent: 'space-evenly',
+    flexDirection: 'row',
   },
   googleBtnContainer: {
     justifyContent: 'center',

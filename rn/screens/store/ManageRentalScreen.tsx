@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { ManageRentalScreenProps } from 'navigation';
 import { usePaginateQuery } from 'hooks';
 import { firebase } from 'gateway';
@@ -8,12 +8,12 @@ import { Spinner } from 'components/spinner';
 import { Rental } from 'common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
-import { Row, Text } from 'native-base';
+import { Text } from 'react-native-elements';
 
 const EmptyMessageContainer = (): JSX.Element => (
-  <Row style={{ justifyContent: 'center', marginTop: '5%' }}>
+  <View style={{ justifyContent: 'center', marginTop: '5%' }}>
     <Text> Time to post new rentals! </Text>
-  </Row>
+  </View>
 );
 
 export const ManageRentalScreen = ({ navigation }: ManageRentalScreenProps) => {

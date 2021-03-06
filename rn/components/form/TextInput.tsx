@@ -1,7 +1,8 @@
 import React from 'react';
+import { View } from 'react-native';
 import { Rules } from './types';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Item, Input, Row, Text, Label, View } from 'native-base';
+import { Input, Text } from 'react-native-elements';
 import {
   TextInputProps as InputProps,
   StyleSheet,
@@ -34,22 +35,22 @@ export const TextInput = ({
       control={control}
       render={({ onChange, value, onBlur }) => (
         <View style={[defaultStyles.inputContainerStyle, inputContainerStyle]}>
-          <Item floatingLabel>
-            <Input
-              onChangeText={(value) => onChange(value)}
-              value={value}
-              onBlur={onBlur}
-              {...rest}
-            />
-            {label && <Label> {label}</Label>}
-          </Item>
-          <Row style={[defaultStyles.errorContainerStyle, errorContainerStyle]}>
+          <Input
+            onChangeText={(value) => onChange(value)}
+            value={value}
+            onBlur={onBlur}
+            {...rest}
+          />
+          {label && <Text> {label}</Text>}
+          <View
+            style={[defaultStyles.errorContainerStyle, errorContainerStyle]}
+          >
             {errors[name] && (
               <Text testID='error' style={defaultStyles.errorColor}>
                 {errors[name].message}
               </Text>
             )}
-          </Row>
+          </View>
         </View>
       )}
       name={name}

@@ -1,6 +1,7 @@
 import React from 'react';
+import { View } from 'react-native';
 import { Form } from 'components/form';
-import { Text, Row } from 'native-base';
+import { Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface LoginFieldProps {
@@ -33,10 +34,10 @@ export const LoginFields = ({ onPress }: LoginFieldProps): JSX.Element => (
         },
       }}
     />
-    <Row style={{ justifyContent: 'flex-end', marginBottom: 15 }}>
+    <View style={{ justifyContent: 'flex-end', marginBottom: 15 }}>
       <TouchableOpacity onPress={onPress}>
         <Text> Forgot password?</Text>
       </TouchableOpacity>
-    </Row>
+    </View>
   </>
 );

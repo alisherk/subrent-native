@@ -1,6 +1,6 @@
 import React from 'react';
+import { View } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form';
-import { Content, Form as NativeBaseForm } from 'native-base';
 import { TextInput } from './TextInput';
 import { Button } from './Button';
 import { Picker } from './Picker';
@@ -16,7 +16,7 @@ export type FormState = {
 };
 
 interface Props {
-  children: (formState: FormState) => JSX.Element[] | JSX.Element;
+  children: (formState?: FormState) => JSX.Element[] | JSX.Element;
 }
 
 export const Form = <TFormValues extends Record<string, any>>({
@@ -25,11 +25,9 @@ export const Form = <TFormValues extends Record<string, any>>({
   const methods = useForm<TFormValues>({ mode: 'onChange' });
 
   return (
-    <Content padder>
-      <FormProvider {...methods}>
-        <NativeBaseForm>{children(methods.formState)}</NativeBaseForm>
-      </FormProvider>
-    </Content>
+    <View style={{ flex: 1, padding: 10, marginTop: 10}}>
+      <FormProvider {...methods}>{children(methods.formState)}</FormProvider>
+    </View>
   );
 };
 

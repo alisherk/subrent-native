@@ -1,6 +1,7 @@
 import React from 'react';
-import { Row, Text, Item, Textarea as NativeBaseTextArea } from 'native-base';
+import { Input, Text } from 'react-native-elements';
 import { Rules } from './types';
+import { View } from 'react-native';
 import {
   Controller,
   useFormContext,
@@ -29,28 +30,25 @@ export const TextArea = ({
       <Controller
         control={control}
         render={({ onChange, value, onBlur }) => (
-          <Item>
-            <NativeBaseTextArea
-              rowSpan={rows}
-              bordered
-              underline
+          <>
+            <Input
               onChangeText={(value) => onChange(value)}
               value={value}
               onBlur={onBlur}
               placeholder={placeholderText}
               style={{ width: '100%' }}
             />
-          </Item>
+          </>
         )}
         name={name}
         rules={rules}
         defaultValue={defaultValue}
       />
-      <Row style={{ marginLeft: 15, padding: 5 }}>
+      <View style={{ marginLeft: 15, padding: 5 }}>
         {errors[name] && (
           <Text style={{ color: 'red' }}>{errors[name].message}</Text>
         )}
-      </Row>
+      </View>
     </>
   );
 };

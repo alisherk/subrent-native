@@ -4,6 +4,7 @@ import { LoginScreen } from '../screens/login';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers';
 import { Platform } from 'react-native';
+import { Text } from "react-native-elements";
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -16,10 +17,10 @@ export const LoginNavigator = (): JSX.Element => {
         name='Login'
         component={LoginScreen}
         options={{
-          title: 'Login',
+          headerTitle: ({ tintColor }) => <Text h4 h4Style={{ color: tintColor, fontWeight: '600' }}> Login </Text>,
           headerStyle: {
-            backgroundColor: '#3F51B5',
-            height: Platform.OS === 'ios' ? 65 : 55, 
+            backgroundColor: '#2089dc',
+            height: Platform.OS === 'ios' ? 100 : 55, 
           },
           headerTintColor: 'white',
           animationTypeForReplace: !authedUser ? 'pop' : 'push',

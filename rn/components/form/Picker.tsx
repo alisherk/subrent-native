@@ -1,17 +1,8 @@
 import React, { useEffect } from 'react';
-import { ViewStyle, TextStyle, StyleSheet } from 'react-native';
+import { ViewStyle, TextStyle, StyleSheet, View } from 'react-native';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Rules } from './types';
-import {
-  View,
-  Icon,
-  Text,
-  Item,
-  Row,
-  Picker as NativeBasePicker,
-} from 'native-base';
-
-console.disableYellowBox = true;
+import { Text } from 'react-native-elements';
 
 export type PickerOption = { id: number; label: string; value: string };
 
@@ -54,32 +45,20 @@ export const Picker = ({
 
         return (
           <View style={defaultStyles.pickerContainer}>
-            <Item style={defaultStyles.item}>
-              <Text> {headerTitle}: </Text>
-              <NativeBasePicker
-                iosIcon={<Icon name='arrow-down' />}
-                placeholder={placeholderText}
-                selectedValue={value}
-                onValueChange={(val) => handleOnChange(val)}
-                testID={testID}
-              >
-                {options.map((option: PickerOption) => (
-                  <NativeBasePicker.Item
-                    key={option.id}
-                    label={option.label}
-                    value={option.value}
-                  />
-                ))}
-              </NativeBasePicker>
-            </Item>
-            <Row style={defaultStyles.row}>
+            <Text> {headerTitle}: </Text>
+            <View testID={testID}>
+              {options.map((option: PickerOption) => (
+                <Text>Options</Text>
+              ))}
+            </View>
+            <View style={defaultStyles.row}>
               {errors[name] && (
                 <Text style={defaultStyles.error}>{errors[name].message}</Text>
               )}
               {specialMessage && (
                 <Text style={defaultStyles.message}>{specialMessage}</Text>
               )}
-            </Row>
+            </View>
           </View>
         );
       }}

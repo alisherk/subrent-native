@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, ViewStyle, StyleProp } from 'react-native';
-import { ListItem, Text, Label, Radio, Row, View } from 'native-base';
+import { StyleSheet, ViewStyle, StyleProp, View } from 'react-native';
+import { ListItem, Text, Input } from 'react-native-elements';
 
 export type RadioOption = {
   id: number;
@@ -28,18 +28,18 @@ export const RadioInput = ({
   return (
     <View style={[defaultStyles.container, style]}>
       {header && (
-        <Label style={{ marginLeft: 20, marginVertical: 10 }}>{header}</Label>
+        <Text style={{ marginLeft: 20, marginVertical: 10 }}>{header}</Text>
       )}
-      <ListItem selected={true} onPress={handlePress}>
+      <ListItem onPress={handlePress}>
         {options.map((option: RadioOption) => (
-          <Row key={option.id} style={{ justifyContent: 'space-evenly' }}>
+          <View key={option.id} style={{ justifyContent: 'space-evenly' }}>
             <Text> {option.label}</Text>
-            <Radio
-              selected={value === option.value}
-              color={option.color}
-              selectedColor={option.selectedColor}
+            <Input
+              //selected={value === option.value}
+              //color={option.color}
+              //selectedColor={option.selectedColor}
             />
-          </Row>
+          </View>
         ))}
       </ListItem>
     </View>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Item, Input, Text, Icon, View } from 'native-base';
+import { View } from 'react-native';
+import { Input, Text, Icon } from 'react-native-elements';
 import { queryStringify } from 'utils/queryStringify';
 import { debounce } from 'utils/debounce';
 import { getEnvVariables } from 'env';
@@ -125,7 +126,7 @@ export const PlacesAutoComplete = ({
 
   return (
     <>
-      <Item>
+      <>
         <Input
           placeholder={placeholderText}
           value={value}
@@ -135,7 +136,7 @@ export const PlacesAutoComplete = ({
         <TouchableOpacity onPress={handleClear}>
           <Icon name='close-circle' style={styles.icon} />
         </TouchableOpacity>
-      </Item>
+      </>
       {suggestion && renderFlatlist()}
     </>
   );

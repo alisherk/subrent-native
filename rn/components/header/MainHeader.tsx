@@ -3,21 +3,8 @@ import { StackHeaderProps } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/reducers/rootReducer';
-import { StyleSheet, ViewStyle, Platform, } from 'react-native';
-import {
-  Header,
-  Left,
-  Body,
-  Right,
-  Button,
-  Icon,
-  Title,
-  Badge,
-  Text,
-  Thumbnail,
-  View,
-} from 'native-base';
-
+import { StyleSheet, ViewStyle, Platform, View, Image } from 'react-native';
+import { Header, Button, Icon, Badge, Text } from 'react-native-elements';
 
 export const MainHeader = ({
   scene,
@@ -38,7 +25,7 @@ export const MainHeader = ({
       return (
         <View style={defaultStyles.thumbContainer}>
           {userImageRef.current ? (
-            <Thumbnail small source={{ uri: userImageRef.current, cache: 'reload' }} />
+            <Image source={{ uri: userImageRef.current, cache: 'reload' }} />
           ) : (
             <Icon name='person' style={defaultStyles.iconStyle} />
           )}
@@ -49,37 +36,26 @@ export const MainHeader = ({
 
   return (
     <Header>
-      <Left>
-        {previous ? (
-          <Button transparent onPress={navigation.goBack}>
-            <Icon name='arrow-back' />
-          </Button>
-        ) : (
-          <Button
-            transparent
-            onPress={() => {
-              navigation.dispatch(DrawerActions.openDrawer());
-            }}
-          >
-            <Icon name='menu' />
-          </Button>
-        )}
-      </Left>
-      <Body>
-        <Title> {title} </Title>
-      </Body>
-      <Right>
-        {renderThumbnail()}
+      {previous ? (
         <Button
-          transparent
-          onPress={() => navigation.navigate('Notifications')}
-        >
-          <Badge style={defaultStyles.badgeStyle}>
-            <Text>2</Text>
-          </Badge>
-          <Icon name='notifications' />
-        </Button>
-      </Right>
+        type='clear'
+          icon={<Icon name='arrow-back' color='white' />}
+          onPress={navigation.goBack}
+        />
+      ) : (
+        <Button
+          type='clear'
+          icon={<Icon name='menu' size={24} color='white' />}
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+        />
+      )}
+      <Text h4 h4Style={{ color: 'white', fontWeight: '600' }}>
+        {title}
+      </Text>
+    <> 
+    <Badge status='error' value='2'  containerStyle={{ position: 'absolute', zIndex: 1, top: 1, right: 3 }}/>
+    <Button type='clear' icon={<Icon name='notifications' color='white'/>}/>
+    </>
     </Header>
   );
 };

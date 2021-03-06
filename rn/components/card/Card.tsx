@@ -1,7 +1,6 @@
 import React from 'react';
-import { Image } from 'react-native';
-import { TouchableOpacity } from 'react-native';
-import { Text, Card, CardItem, Button, Content, View } from 'native-base';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text, Card, Button } from 'react-native-elements';
 
 interface CardProps {
   name: string;
@@ -27,29 +26,23 @@ export const CardComponent = ({
     : 'https://www.dia.org/sites/default/files/No_Img_Avail.jpg';
 
   return (
-    <Content padder>
-      <Card>
-        <TouchableOpacity onPress={() => onSelect(category)}>
-          <CardItem bordered style={{ justifyContent: 'center' }}>
-            <Text> {name} </Text>
-          </CardItem>
-          <CardItem cardBody>
-            <Image
-              style={{ flex: 1, height: 250 }}
-              source={{ uri: imageUrl }}
-            />
-          </CardItem>
-          <CardItem bordered style={{ justifyContent: 'space-evenly' }}>
-            <Text> Full day: ${`${full_day_price}`} </Text>
-            <Text> Half day: ${`${half_day_price}`} </Text>
-          </CardItem>
-          <View style={{ padding: 10 }}>
-            <Button full success onPress={() => onSelect(category)}>
-              <Text>{btnName}</Text>
-            </Button>
-          </View>
-        </TouchableOpacity>
-      </Card>
-    </Content>
+    <Card>
+      <TouchableOpacity onPress={() => onSelect(category)}>
+        <Card.Title style={styles.text}> {name} </Card.Title>
+        <Card.Image style={styles.image} source={{ uri: imageUrl }} />
+        <View style={styles.contentContainer}>
+          <Text style={styles.text}> Full day: ${`${full_day_price}`} </Text>
+          <Text style={styles.text}> Half day: ${`${half_day_price}`} </Text>
+        </View>
+
+        <Button title={btnName} onPress={() => onSelect(category)} />
+      </TouchableOpacity>
+    </Card>
   );
 };
+
+const styles = StyleSheet.create({
+  image: { height: 250 },
+  contentContainer: { padding: 10, alignItems: 'center' },
+  text: { fontSize: 16 },
+});

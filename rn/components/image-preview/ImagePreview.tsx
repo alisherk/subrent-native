@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Icon } from 'native-base';
+import { Text, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 import {
   Image,
@@ -8,6 +8,7 @@ import {
   ViewStyle,
   ImageStyle,
   StyleProp,
+  View
 } from 'react-native';
 
 interface ImagePreviewProps {

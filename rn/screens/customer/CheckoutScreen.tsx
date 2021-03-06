@@ -1,16 +1,13 @@
 import React, { useReducer, useEffect } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { createStripeSession } from 'gateway/functions';
 import { calculatePrice, calculationResult } from 'utils/calculatePrice';
-import { Spinner } from 'components/spinner';
 import { RadioInput, RadioOption } from 'components/form';
 import { Rental } from 'common';
 import { RootState } from 'redux/reducers';
 import { CheckoutScreenProps } from 'navigation';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Container, Text, Content, Button, Card, CardItem } from 'native-base';
-import { format } from 'date-fns';
+import { Text, Button, Card } from 'react-native-elements';
 
 const PriceOptions: RadioOption[] = [
   {
@@ -179,7 +176,7 @@ export const CheckoutScreen = ({
 
   const handleDateChange = (date: Date | undefined) => (type: string) => {
     if (!date) return;
-    console.log(type)
+    console.log(type);
     dispatch({ type: ActionTypes.SET_DATE, dateType: type, value: date });
   };
 
@@ -236,76 +233,40 @@ export const CheckoutScreen = ({
     }
   };
   return (
-    <Container>
-      <Content padder>
-        <Card>
-          <CardItem header>
-            <RadioInput
-              value={price_choice}
-              handlePress={handlePriceChange}
-              options={PriceOptions}
-            />
-          </CardItem>
-          <CardItem bordered style={styles.row}>
-            <Text
-              onPress={() =>
-                handleShowDatePicker(Identifiers.SHOW_FROM_PICKER, true)
-              }
-            >
-              From: {format(fromDate, 'MMM d, Y')}
-            </Text>
-            {showFromDatePicker && (
-              <DateTimePicker
-                style={styles.datePickerStyle}
-                display='spinner'
-                value={fromDate}
-                onChange={(e, date) => handleDateChange(date)(Identifiers.FROM)}
-              />
-            )}
-
-            <Text
-              onPress={() =>
-                handleShowDatePicker(Identifiers.SHOW_TO_PICKER, true)
-              }
-            >
-              To: {format(toDate, 'MMM d, Y')}
-            </Text>
-            {showToDatePicker && (
-              <DateTimePicker
-                style={styles.datePickerStyle}
-                display='spinner'
-                value={toDate}
-                onChange={(e, date) => handleDateChange(date)(Identifiers.TO)}
-              />
-            )}
-          </CardItem>
-          <CardItem bordered style={styles.row}>
-            <Text> GST: 5% </Text>
-          </CardItem>
-          <CardItem bordered style={styles.row}>
-            <Text> Our fee: 10% </Text>
-          </CardItem>
-          {loading && <Spinner />}
-          <CardItem footer style={styles.bottomRow}>
-            <Text> TOTAL: ${total.toFixed(2)} </Text>
-            <Button onPress={handleProceedToNext}>
-              <Text>
-                {rental.confirmation_required === 'yes'
-                  ? 'Contact Owner'
-                  : 'Proceed to Pay'}
-              </Text>
-            </Button>
-          </CardItem>
-          <CardItem footer>
+    <View>
+      <Card>
+        <View>
+          <RadioInput
+            value={price_choice}
+            handlePress={handlePriceChange}
+            options={PriceOptions}
+          />
+        </View>
+        <View>
+          <Text> GST: 5% </Text>
+        </View>
+        <View>
+          <Text> Our fee: 10% </Text>
+        </View>
+        <View style={styles.bottomRow}>
+          <Text> TOTAL: ${total.toFixed(2)} </Text>
+          <Button onPress={handleProceedToNext}>
             <Text>
               {rental.confirmation_required === 'yes'
-                ? 'You need to contact the owner to confirm availability'
-                : "You don't need to contact the owner"}
+                ? 'Contact Owner'
+                : 'Proceed to Pay'}
             </Text>
-          </CardItem>
-        </Card>
-      </Content>
-    </Container>
+          </Button>
+        </View>
+        <View>
+          <Text>
+            {rental.confirmation_required === 'yes'
+              ? 'You need to contact the owner to confirm availability'
+              : "You don't need to contact the owner"}
+          </Text>
+        </View>
+      </Card>
+    </View>
   );
 };
 
