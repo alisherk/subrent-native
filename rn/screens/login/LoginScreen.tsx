@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ViewStyle, View } from 'react-native';
+import { StyleSheet, ViewStyle, View, TouchableNativeFeedback } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { Form } from 'components/form';
 import { LoginFields } from './LoginFields';
@@ -86,7 +86,9 @@ export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
       }
       if (screen === Screens.SIGNUP) {
         await dispatch(actions.registerUser(formValues));
-      } else await dispatch(actions.loginUser(formValues));
+      } else {
+        await dispatch(actions.loginUser(formValues));  
+      } 
     } catch (err) {}
   };
 
@@ -116,9 +118,10 @@ export const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
               type='outline'
             />
           </View>
-          <Button
+          <Form.Button
+            handlePress={handleLoginWithGoogle}
             type='outline'
-            containerStyle={{ alignItems: 'center'}}
+            containerStyle={{ alignItems: 'center', padding: 0}}
             buttonStyle={{ width: 80, borderRadius: 100, height: 80}}
             icon={<FontAwesome name='google' size={40} color='crimson' />}
           />

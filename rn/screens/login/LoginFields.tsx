@@ -34,9 +34,15 @@ export const LoginFields = ({ onPress }: LoginFieldProps): JSX.Element => (
         },
       }}
     />
-    <View style={{ justifyContent: 'flex-end', marginBottom: 15 }}>
+    <View
+      style={{
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        marginBottom: 5,
+      }}
+    >
       <TouchableOpacity onPress={onPress}>
-        <Text> Forgot password?</Text>
+        <Text style={{ color: 'crimson' }}> Forgot password?</Text>
       </TouchableOpacity>
     </View>
   </>
